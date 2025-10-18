@@ -1,0 +1,32 @@
+syntax = "proto3";
+package rpc.auth;
+option go_package = "QuickStone/src/rpc/auth";
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    uint32 status_code = 1;
+    string status_msg = 2;
+    uint32 uid = 3;
+    string token = 4;
+}
+
+message RegisterRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message RegisterResponse {
+    uint32 status_code = 1;
+    string status_msg = 2;
+    uint32 uid = 3;
+    string token = 4;
+}
+
+service AuthService {
+    rpc LoginService(LoginRequest) returns(LoginResponse);
+    rpc RegisterService(RegisterRequest) returns(RegisterResponse);
+}
