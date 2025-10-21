@@ -286,10 +286,10 @@ const file_auth_proto_rawDesc = "" +
 	"\n" +
 	"status_msg\x18\x02 \x01(\tR\tstatusMsg\x12\x10\n" +
 	"\x03uid\x18\x03 \x01(\rR\x03uid\x12\x14\n" +
-	"\x05token\x18\x04 \x01(\tR\x05token2\x98\x01\n" +
-	"\vAuthService\x12?\n" +
-	"\fLoginService\x12\x16.rpc.auth.LoginRequest\x1a\x17.rpc.auth.LoginResponse\x12H\n" +
-	"\x0fRegisterService\x12\x19.rpc.auth.RegisterRequest\x1a\x1a.rpc.auth.RegisterResponseB\x19Z\x17QuickStone/src/rpc/authb\x06proto3"
+	"\x05token\x18\x04 \x01(\tR\x05token2\x8a\x01\n" +
+	"\vAuthService\x128\n" +
+	"\x05Login\x12\x16.rpc.auth.LoginRequest\x1a\x17.rpc.auth.LoginResponse\x12A\n" +
+	"\bRegister\x12\x19.rpc.auth.RegisterRequest\x1a\x1a.rpc.auth.RegisterResponseB\x19Z\x17QuickStone/src/rpc/authb\x06proto3"
 
 var (
 	file_auth_proto_rawDescOnce sync.Once
@@ -311,10 +311,10 @@ var file_auth_proto_goTypes = []any{
 	(*RegisterResponse)(nil), // 3: rpc.auth.RegisterResponse
 }
 var file_auth_proto_depIdxs = []int32{
-	0, // 0: rpc.auth.AuthService.LoginService:input_type -> rpc.auth.LoginRequest
-	2, // 1: rpc.auth.AuthService.RegisterService:input_type -> rpc.auth.RegisterRequest
-	1, // 2: rpc.auth.AuthService.LoginService:output_type -> rpc.auth.LoginResponse
-	3, // 3: rpc.auth.AuthService.RegisterService:output_type -> rpc.auth.RegisterResponse
+	0, // 0: rpc.auth.AuthService.Login:input_type -> rpc.auth.LoginRequest
+	2, // 1: rpc.auth.AuthService.Register:input_type -> rpc.auth.RegisterRequest
+	1, // 2: rpc.auth.AuthService.Login:output_type -> rpc.auth.LoginResponse
+	3, // 3: rpc.auth.AuthService.Register:output_type -> rpc.auth.RegisterResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

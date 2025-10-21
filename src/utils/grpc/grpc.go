@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/mhwwhu/QuickStone/src/constant/config"
+	_ "github.com/mbobakov/grpc-consul-resolver"
+	"github.com/mhwwhu/QuickStone/src/config"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -13,13 +14,13 @@ import (
 
 func Connect(serviceName string) (conn *grpc.ClientConn) {
 	kacp := keepalive.ClientParameters{
-		Time:                10 * time.Second, // send pings every 10 seconds if there is no activity
-		Timeout:             time.Second,      // wait 1 second for ping ack before considering the connection dead
-		PermitWithoutStream: false,            // send pings even without active streams
+		Time:                10 * time.Second,
+		Timeout:             time.Second,
+		PermitWithoutStream: false,
 	}
 
 	conn, err := grpc.NewClient(
-		fmt.Sprintf("consul://%s/%s?wait=15s", config.EnvCfg.ConsulAddr, config.EnvCfg.ConsulNamePrefix+serviceName),
+		fmt.Sprintf("consul://%s:%d/%s?wait=15s", config.EnvCfg.ConsulAddr, config.EnvCfg.ConsulPort, config.EnvCfg.ConsulNamePrefix+serviceName),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		grpc.WithKeepaliveParams(kacp),

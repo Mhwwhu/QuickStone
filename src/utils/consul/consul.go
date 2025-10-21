@@ -3,7 +3,7 @@ package consul
 import (
 	"fmt"
 
-	"github.com/mhwwhu/QuickStone/src/constant/config"
+	"github.com/mhwwhu/QuickStone/src/config"
 
 	"github.com/google/uuid"
 	capi "github.com/hashicorp/consul/api"
@@ -23,15 +23,16 @@ func init() {
 	}
 }
 
-func RegisterConsul(name string, port uint32) error {
+func RegisterConsul(name string, port uint32) (string, error) {
 	logrus.WithFields(logrus.Fields{
 		"name": name,
 		"port": port,
 	}).Infof("Services Register Consul")
 	name = config.EnvCfg.ConsulNamePrefix + name
 
+	id := fmt.Sprintf("%s-%s", name, uuid.New().String())
 	reg := &capi.AgentServiceRegistration{
-		ID:      fmt.Sprintf("%s-%s", name, uuid.New().String()),
+		ID:      id,
 		Name:    name,
 		Address: config.EnvCfg.PodIpAddr,
 		Port:    int(port),
@@ -44,7 +45,7 @@ func RegisterConsul(name string, port uint32) error {
 		},
 	}
 	if err := consulClient.Agent().ServiceRegister(reg); err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }

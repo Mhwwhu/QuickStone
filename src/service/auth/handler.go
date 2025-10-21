@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/mhwwhu/QuickStone/src/rpc/auth"
+	"github.com/sirupsen/logrus"
 )
 
 type AuthService struct {
@@ -14,7 +15,8 @@ func (a AuthService) Init() {
 
 }
 
-func (a AuthService) LoginService(ctx context.Context, req *auth.LoginRequest) (resp *auth.LoginResponse, err error) {
+func (a AuthService) Login(ctx context.Context, req *auth.LoginRequest) (resp *auth.LoginResponse, err error) {
+	logrus.Infof("Service %s is processing Login", ServerId)
 	resp = &auth.LoginResponse{
 		StatusCode: 0,
 		StatusMsg:  "Login success!",
@@ -24,10 +26,11 @@ func (a AuthService) LoginService(ctx context.Context, req *auth.LoginRequest) (
 	return
 }
 
-func (a AuthService) RegisterService(ctx context.Context, req *auth.RegisterRequest) (resp *auth.RegisterResponse, err error) {
+func (a AuthService) Register(ctx context.Context, req *auth.RegisterRequest) (resp *auth.RegisterResponse, err error) {
+	logrus.Infof("Service %s is processing Register", ServerId)
 	resp = &auth.RegisterResponse{
 		StatusCode: 0,
-		StatusMsg:  "Login success!",
+		StatusMsg:  "Register success!",
 		Uid:        1,
 		Token:      "111",
 	}

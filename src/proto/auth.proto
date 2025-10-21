@@ -27,6 +27,6 @@ message RegisterResponse {
 }
 
 service AuthService {
-    rpc LoginService(LoginRequest) returns(LoginResponse);
-    rpc RegisterService(RegisterRequest) returns(RegisterResponse);
+    rpc Login(LoginRequest) returns(LoginResponse);
+    rpc Register(RegisterRequest) returns(RegisterResponse);
 }
