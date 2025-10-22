@@ -22,10 +22,10 @@ func init() {
 func LoginHandle(c *gin.Context) {
 	var req models.LoginRequest
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, auth.LoginResponse{
+		c.JSON(http.StatusOK, models.LoginResponse{
 			StatusCode: constant.GateWayParamsErrorCode,
 			StatusMsg:  constant.GateWayParamsError,
-			Uid:        0,
+			UserId:     0,
 			Token:      "",
 		})
 		return

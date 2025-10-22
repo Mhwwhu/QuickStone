@@ -19,6 +19,8 @@ const WebServiceName = "Web-service"
 const WebServicePort = 10001
 const AuthServerName = "Auth-service"
 const AuthServerPort = 10002
+const TransmissionServerName = "Transmission-service"
+const TransmissionServerPort = 10003
 
 func init() {
 	if err := godotenv.Load(); err != nil {
