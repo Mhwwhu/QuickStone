@@ -3,20 +3,22 @@ package main
 import (
 	"fmt"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/mhwwhu/QuickStone/src/config"
-	"github.com/mhwwhu/QuickStone/src/web/auth"
+	routers "github.com/mhwwhu/QuickStone/src/web/router"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	g := gin.Default()
 
-	rootPath := g.Group("/")
+	//先注册中间件
+	store := cookie.NewStore([]byte("secret"))
+	g.Use(sessions.Sessions("mysession", store))
 
-	user := rootPath.Group("/user")
-	user.POST("/login", auth.LoginHandle)
-	user.POST("/register", auth.RegisterHandle)
+	routers.InitDefaultRouter(g)
 
 	if err := g.Run(fmt.Sprintf(":%d", config.WebServicePort)); err != nil {
 		logrus.Panicf("Cannot run gateway, binding port: %d", config.WebServicePort)
