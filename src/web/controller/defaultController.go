@@ -6,7 +6,6 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/mhwwhu/QuickStone/src/models"
-	"github.com/sirupsen/logrus"
 )
 
 // var Client auth.AuthServiceClient
@@ -15,55 +14,54 @@ import (
 // 	Client = auth.NewAuthServiceClient(conn)
 // }
 
-var users = map[string]string{
-	"123@qq.com": "123",
-	"bob":        "123",
-}
-
 func LoginHandle(c *gin.Context) {
 	var req models.LoginRequest
-	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, gin.H{
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
 			"status_code": 400,
 			"status_msg":  "参数错误",
-			"user_id":     0,
 		})
 		return
 	}
 
-	pwd, ok := users[req.UserName]
-	if !ok || pwd != req.Password {
-		c.JSON(http.StatusOK, gin.H{
+	// TODO: 这里用真实数据库验证用户密码
+	if !checkUserPassword(req.UserName, req.Password) {
+		c.JSON(401, gin.H{
 			"status_code": 401,
 			"status_msg":  "用户名或密码错误",
-			"user_id":     0,
 		})
 		return
 	}
-
-	// 登录成功，保存 session
 
 	session := sessions.Default(c)
 	session.Set("userid", req.UserName)
 	session.Set("username", req.UserName)
 	if err := session.Save(); err != nil {
-		logrus.Errorf("Failed to save session: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(500, gin.H{
 			"status_code": 500,
 			"status_msg":  "保存 session 失败",
 		})
 		return
 	}
 
-	logrus.Infof("User %s has logged in", req.UserName)
-
-	// 返回登录成功信息
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(200, gin.H{
 		"status_code": 200,
 		"status_msg":  "登录成功",
 		"user_id":     req.UserName,
 	})
 }
+
+// 示例用户验证函数，改成真实 DB 查询即可
+func checkUserPassword(username, password string) bool {
+
+	users := map[string]string{
+		"123@qq.com": "123",
+		"bob":        "123",
+	}
+	pwd, ok := users[username]
+	return ok && pwd == password
+}
+
 func RegisterHandle(c *gin.Context) {
 	// var req models.RegisterRequest
 	// if err := c.ShouldBind(&req); err != nil {
