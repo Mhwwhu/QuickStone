@@ -2,13 +2,24 @@ syntax = "proto3";
 package rpc.transmission;
 option go_package = "QuickStone/src/rpc/transmission";
 
-message UploadObjectRequest {
-    string user_id = 1;       // 定位到要将对象上传到哪个用户的存储资源下
+message UploadObjectRequestHeader {
+    uint64 target_user_id = 1;       // 定位到要将对象上传到哪个用户的存储资源下
     string bucket = 2;
     string key = 3;
     string object_type = 4;
-    bytes file_data = 5;
-    string token = 6;
+    uint64 object_size = 5;
+}
+
+message UploadObjectRequestBody {
+    uint32 series_no = 1;
+    bytes data = 2;
+}
+
+message UploadObjectRequestChunk {
+    oneof payload {
+        UploadObjectRequestHeader header = 1;
+        UploadObjectRequestBody data = 2;
+    }
 }
 
 message UploadObjectResponse {
@@ -17,10 +28,9 @@ message UploadObjectResponse {
 }
 
 message DownloadObjectRequest {
-    uint64 user_id = 1;
+    uint64 target_user_id = 1;
     string bucket = 2;
     string key = 3;
-    string token = 4;
 }
 
 message DownloadObjectResponse {
@@ -30,6 +40,6 @@ message DownloadObjectResponse {
 }
 
 service TransmissionService {
-    rpc UploadObject(UploadObjectRequest) returns(UploadObjectResponse);
+    rpc UploadObject(stream UploadObjectRequestChunk) returns(UploadObjectResponse);
     rpc DownloadObject(DownloadObjectRequest) returns(DownloadObjectResponse);
 }

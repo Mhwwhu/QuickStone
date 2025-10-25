@@ -10,6 +10,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/mbobakov/grpc-consul-resolver v1.5.3
 	github.com/oklog/run v1.2.0
+	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/grpc v1.76.0
 	google.golang.org/protobuf v1.36.9

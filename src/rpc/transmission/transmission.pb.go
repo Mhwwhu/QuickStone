@@ -21,32 +21,31 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type UploadObjectRequest struct {
+type UploadObjectRequestHeader struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // 定位到要将对象上传到哪个用户的存储资源下
+	TargetUserId  uint64                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"` // 定位到要将对象上传到哪个用户的存储资源下
 	Bucket        string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 	ObjectType    string                 `protobuf:"bytes,4,opt,name=object_type,json=objectType,proto3" json:"object_type,omitempty"`
-	FileData      []byte                 `protobuf:"bytes,5,opt,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
-	Token         string                 `protobuf:"bytes,6,opt,name=token,proto3" json:"token,omitempty"`
+	ObjectSize    uint64                 `protobuf:"varint,5,opt,name=object_size,json=objectSize,proto3" json:"object_size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UploadObjectRequest) Reset() {
-	*x = UploadObjectRequest{}
+func (x *UploadObjectRequestHeader) Reset() {
+	*x = UploadObjectRequestHeader{}
 	mi := &file_transmission_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UploadObjectRequest) String() string {
+func (x *UploadObjectRequestHeader) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UploadObjectRequest) ProtoMessage() {}
+func (*UploadObjectRequestHeader) ProtoMessage() {}
 
-func (x *UploadObjectRequest) ProtoReflect() protoreflect.Message {
+func (x *UploadObjectRequestHeader) ProtoReflect() protoreflect.Message {
 	mi := &file_transmission_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -58,52 +57,179 @@ func (x *UploadObjectRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UploadObjectRequest.ProtoReflect.Descriptor instead.
-func (*UploadObjectRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use UploadObjectRequestHeader.ProtoReflect.Descriptor instead.
+func (*UploadObjectRequestHeader) Descriptor() ([]byte, []int) {
 	return file_transmission_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *UploadObjectRequest) GetUserId() string {
+func (x *UploadObjectRequestHeader) GetTargetUserId() uint64 {
 	if x != nil {
-		return x.UserId
+		return x.TargetUserId
 	}
-	return ""
+	return 0
 }
 
-func (x *UploadObjectRequest) GetBucket() string {
+func (x *UploadObjectRequestHeader) GetBucket() string {
 	if x != nil {
 		return x.Bucket
 	}
 	return ""
 }
 
-func (x *UploadObjectRequest) GetKey() string {
+func (x *UploadObjectRequestHeader) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *UploadObjectRequest) GetObjectType() string {
+func (x *UploadObjectRequestHeader) GetObjectType() string {
 	if x != nil {
 		return x.ObjectType
 	}
 	return ""
 }
 
-func (x *UploadObjectRequest) GetFileData() []byte {
+func (x *UploadObjectRequestHeader) GetObjectSize() uint64 {
 	if x != nil {
-		return x.FileData
+		return x.ObjectSize
+	}
+	return 0
+}
+
+type UploadObjectRequestBody struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SeriesNo      uint32                 `protobuf:"varint,1,opt,name=series_no,json=seriesNo,proto3" json:"series_no,omitempty"`
+	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadObjectRequestBody) Reset() {
+	*x = UploadObjectRequestBody{}
+	mi := &file_transmission_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadObjectRequestBody) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadObjectRequestBody) ProtoMessage() {}
+
+func (x *UploadObjectRequestBody) ProtoReflect() protoreflect.Message {
+	mi := &file_transmission_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadObjectRequestBody.ProtoReflect.Descriptor instead.
+func (*UploadObjectRequestBody) Descriptor() ([]byte, []int) {
+	return file_transmission_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *UploadObjectRequestBody) GetSeriesNo() uint32 {
+	if x != nil {
+		return x.SeriesNo
+	}
+	return 0
+}
+
+func (x *UploadObjectRequestBody) GetData() []byte {
+	if x != nil {
+		return x.Data
 	}
 	return nil
 }
 
-func (x *UploadObjectRequest) GetToken() string {
-	if x != nil {
-		return x.Token
-	}
-	return ""
+type UploadObjectRequestChunk struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Payload:
+	//
+	//	*UploadObjectRequestChunk_Header
+	//	*UploadObjectRequestChunk_Data
+	Payload       isUploadObjectRequestChunk_Payload `protobuf_oneof:"payload"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
+
+func (x *UploadObjectRequestChunk) Reset() {
+	*x = UploadObjectRequestChunk{}
+	mi := &file_transmission_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadObjectRequestChunk) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadObjectRequestChunk) ProtoMessage() {}
+
+func (x *UploadObjectRequestChunk) ProtoReflect() protoreflect.Message {
+	mi := &file_transmission_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadObjectRequestChunk.ProtoReflect.Descriptor instead.
+func (*UploadObjectRequestChunk) Descriptor() ([]byte, []int) {
+	return file_transmission_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *UploadObjectRequestChunk) GetPayload() isUploadObjectRequestChunk_Payload {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
+func (x *UploadObjectRequestChunk) GetHeader() *UploadObjectRequestHeader {
+	if x != nil {
+		if x, ok := x.Payload.(*UploadObjectRequestChunk_Header); ok {
+			return x.Header
+		}
+	}
+	return nil
+}
+
+func (x *UploadObjectRequestChunk) GetData() *UploadObjectRequestBody {
+	if x != nil {
+		if x, ok := x.Payload.(*UploadObjectRequestChunk_Data); ok {
+			return x.Data
+		}
+	}
+	return nil
+}
+
+type isUploadObjectRequestChunk_Payload interface {
+	isUploadObjectRequestChunk_Payload()
+}
+
+type UploadObjectRequestChunk_Header struct {
+	Header *UploadObjectRequestHeader `protobuf:"bytes,1,opt,name=header,proto3,oneof"`
+}
+
+type UploadObjectRequestChunk_Data struct {
+	Data *UploadObjectRequestBody `protobuf:"bytes,2,opt,name=data,proto3,oneof"`
+}
+
+func (*UploadObjectRequestChunk_Header) isUploadObjectRequestChunk_Payload() {}
+
+func (*UploadObjectRequestChunk_Data) isUploadObjectRequestChunk_Payload() {}
 
 type UploadObjectResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -115,7 +241,7 @@ type UploadObjectResponse struct {
 
 func (x *UploadObjectResponse) Reset() {
 	*x = UploadObjectResponse{}
-	mi := &file_transmission_proto_msgTypes[1]
+	mi := &file_transmission_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -127,7 +253,7 @@ func (x *UploadObjectResponse) String() string {
 func (*UploadObjectResponse) ProtoMessage() {}
 
 func (x *UploadObjectResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_transmission_proto_msgTypes[1]
+	mi := &file_transmission_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -140,7 +266,7 @@ func (x *UploadObjectResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadObjectResponse.ProtoReflect.Descriptor instead.
 func (*UploadObjectResponse) Descriptor() ([]byte, []int) {
-	return file_transmission_proto_rawDescGZIP(), []int{1}
+	return file_transmission_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *UploadObjectResponse) GetStatusCode() uint32 {
@@ -159,17 +285,16 @@ func (x *UploadObjectResponse) GetStatusMsg() string {
 
 type DownloadObjectRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TargetUserId  uint64                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"`
 	Bucket        string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
-	Token         string                 `protobuf:"bytes,4,opt,name=token,proto3" json:"token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *DownloadObjectRequest) Reset() {
 	*x = DownloadObjectRequest{}
-	mi := &file_transmission_proto_msgTypes[2]
+	mi := &file_transmission_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -181,7 +306,7 @@ func (x *DownloadObjectRequest) String() string {
 func (*DownloadObjectRequest) ProtoMessage() {}
 
 func (x *DownloadObjectRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_transmission_proto_msgTypes[2]
+	mi := &file_transmission_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -194,12 +319,12 @@ func (x *DownloadObjectRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DownloadObjectRequest.ProtoReflect.Descriptor instead.
 func (*DownloadObjectRequest) Descriptor() ([]byte, []int) {
-	return file_transmission_proto_rawDescGZIP(), []int{2}
+	return file_transmission_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *DownloadObjectRequest) GetUserId() uint64 {
+func (x *DownloadObjectRequest) GetTargetUserId() uint64 {
 	if x != nil {
-		return x.UserId
+		return x.TargetUserId
 	}
 	return 0
 }
@@ -218,13 +343,6 @@ func (x *DownloadObjectRequest) GetKey() string {
 	return ""
 }
 
-func (x *DownloadObjectRequest) GetToken() string {
-	if x != nil {
-		return x.Token
-	}
-	return ""
-}
-
 type DownloadObjectResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
@@ -236,7 +354,7 @@ type DownloadObjectResponse struct {
 
 func (x *DownloadObjectResponse) Reset() {
 	*x = DownloadObjectResponse{}
-	mi := &file_transmission_proto_msgTypes[3]
+	mi := &file_transmission_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -248,7 +366,7 @@ func (x *DownloadObjectResponse) String() string {
 func (*DownloadObjectResponse) ProtoMessage() {}
 
 func (x *DownloadObjectResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_transmission_proto_msgTypes[3]
+	mi := &file_transmission_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -261,7 +379,7 @@ func (x *DownloadObjectResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DownloadObjectResponse.ProtoReflect.Descriptor instead.
 func (*DownloadObjectResponse) Descriptor() ([]byte, []int) {
-	return file_transmission_proto_rawDescGZIP(), []int{3}
+	return file_transmission_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DownloadObjectResponse) GetStatusCode() uint32 {
@@ -289,33 +407,39 @@ var File_transmission_proto protoreflect.FileDescriptor
 
 const file_transmission_proto_rawDesc = "" +
 	"\n" +
-	"\x12transmission.proto\x12\x10rpc.transmission\"\xac\x01\n" +
-	"\x13UploadObjectRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x16\n" +
+	"\x12transmission.proto\x12\x10rpc.transmission\"\xad\x01\n" +
+	"\x19UploadObjectRequestHeader\x12$\n" +
+	"\x0etarget_user_id\x18\x01 \x01(\x04R\ftargetUserId\x12\x16\n" +
 	"\x06bucket\x18\x02 \x01(\tR\x06bucket\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\x12\x1f\n" +
 	"\vobject_type\x18\x04 \x01(\tR\n" +
-	"objectType\x12\x1b\n" +
-	"\tfile_data\x18\x05 \x01(\fR\bfileData\x12\x14\n" +
-	"\x05token\x18\x06 \x01(\tR\x05token\"V\n" +
+	"objectType\x12\x1f\n" +
+	"\vobject_size\x18\x05 \x01(\x04R\n" +
+	"objectSize\"J\n" +
+	"\x17UploadObjectRequestBody\x12\x1b\n" +
+	"\tseries_no\x18\x01 \x01(\rR\bseriesNo\x12\x12\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\"\xad\x01\n" +
+	"\x18UploadObjectRequestChunk\x12E\n" +
+	"\x06header\x18\x01 \x01(\v2+.rpc.transmission.UploadObjectRequestHeaderH\x00R\x06header\x12?\n" +
+	"\x04data\x18\x02 \x01(\v2).rpc.transmission.UploadObjectRequestBodyH\x00R\x04dataB\t\n" +
+	"\apayload\"V\n" +
 	"\x14UploadObjectResponse\x12\x1f\n" +
 	"\vstatus_code\x18\x01 \x01(\rR\n" +
 	"statusCode\x12\x1d\n" +
 	"\n" +
-	"status_msg\x18\x02 \x01(\tR\tstatusMsg\"p\n" +
-	"\x15DownloadObjectRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x04R\x06userId\x12\x16\n" +
+	"status_msg\x18\x02 \x01(\tR\tstatusMsg\"g\n" +
+	"\x15DownloadObjectRequest\x12$\n" +
+	"\x0etarget_user_id\x18\x01 \x01(\x04R\ftargetUserId\x12\x16\n" +
 	"\x06bucket\x18\x02 \x01(\tR\x06bucket\x12\x10\n" +
-	"\x03key\x18\x03 \x01(\tR\x03key\x12\x14\n" +
-	"\x05token\x18\x04 \x01(\tR\x05token\"p\n" +
+	"\x03key\x18\x03 \x01(\tR\x03key\"p\n" +
 	"\x16DownloadObjectResponse\x12\x1f\n" +
 	"\vstatus_code\x18\x01 \x01(\rR\n" +
 	"statusCode\x12\x1d\n" +
 	"\n" +
 	"status_msg\x18\x02 \x01(\tR\tstatusMsg\x12\x16\n" +
-	"\x06object\x18\x03 \x01(\fR\x06object2\xd9\x01\n" +
-	"\x13TransmissionService\x12]\n" +
-	"\fUploadObject\x12%.rpc.transmission.UploadObjectRequest\x1a&.rpc.transmission.UploadObjectResponse\x12c\n" +
+	"\x06object\x18\x03 \x01(\fR\x06object2\xe0\x01\n" +
+	"\x13TransmissionService\x12d\n" +
+	"\fUploadObject\x12*.rpc.transmission.UploadObjectRequestChunk\x1a&.rpc.transmission.UploadObjectResponse(\x01\x12c\n" +
 	"\x0eDownloadObject\x12'.rpc.transmission.DownloadObjectRequest\x1a(.rpc.transmission.DownloadObjectResponseB!Z\x1fQuickStone/src/rpc/transmissionb\x06proto3"
 
 var (
@@ -330,23 +454,27 @@ func file_transmission_proto_rawDescGZIP() []byte {
 	return file_transmission_proto_rawDescData
 }
 
-var file_transmission_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_transmission_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_transmission_proto_goTypes = []any{
-	(*UploadObjectRequest)(nil),    // 0: rpc.transmission.UploadObjectRequest
-	(*UploadObjectResponse)(nil),   // 1: rpc.transmission.UploadObjectResponse
-	(*DownloadObjectRequest)(nil),  // 2: rpc.transmission.DownloadObjectRequest
-	(*DownloadObjectResponse)(nil), // 3: rpc.transmission.DownloadObjectResponse
+	(*UploadObjectRequestHeader)(nil), // 0: rpc.transmission.UploadObjectRequestHeader
+	(*UploadObjectRequestBody)(nil),   // 1: rpc.transmission.UploadObjectRequestBody
+	(*UploadObjectRequestChunk)(nil),  // 2: rpc.transmission.UploadObjectRequestChunk
+	(*UploadObjectResponse)(nil),      // 3: rpc.transmission.UploadObjectResponse
+	(*DownloadObjectRequest)(nil),     // 4: rpc.transmission.DownloadObjectRequest
+	(*DownloadObjectResponse)(nil),    // 5: rpc.transmission.DownloadObjectResponse
 }
 var file_transmission_proto_depIdxs = []int32{
-	0, // 0: rpc.transmission.TransmissionService.UploadObject:input_type -> rpc.transmission.UploadObjectRequest
-	2, // 1: rpc.transmission.TransmissionService.DownloadObject:input_type -> rpc.transmission.DownloadObjectRequest
-	1, // 2: rpc.transmission.TransmissionService.UploadObject:output_type -> rpc.transmission.UploadObjectResponse
-	3, // 3: rpc.transmission.TransmissionService.DownloadObject:output_type -> rpc.transmission.DownloadObjectResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: rpc.transmission.UploadObjectRequestChunk.header:type_name -> rpc.transmission.UploadObjectRequestHeader
+	1, // 1: rpc.transmission.UploadObjectRequestChunk.data:type_name -> rpc.transmission.UploadObjectRequestBody
+	2, // 2: rpc.transmission.TransmissionService.UploadObject:input_type -> rpc.transmission.UploadObjectRequestChunk
+	4, // 3: rpc.transmission.TransmissionService.DownloadObject:input_type -> rpc.transmission.DownloadObjectRequest
+	3, // 4: rpc.transmission.TransmissionService.UploadObject:output_type -> rpc.transmission.UploadObjectResponse
+	5, // 5: rpc.transmission.TransmissionService.DownloadObject:output_type -> rpc.transmission.DownloadObjectResponse
+	4, // [4:6] is the sub-list for method output_type
+	2, // [2:4] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_transmission_proto_init() }
@@ -354,13 +482,17 @@ func file_transmission_proto_init() {
 	if File_transmission_proto != nil {
 		return
 	}
+	file_transmission_proto_msgTypes[2].OneofWrappers = []any{
+		(*UploadObjectRequestChunk_Header)(nil),
+		(*UploadObjectRequestChunk_Data)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_transmission_proto_rawDesc), len(file_transmission_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

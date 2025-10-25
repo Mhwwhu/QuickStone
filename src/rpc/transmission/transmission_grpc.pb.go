@@ -27,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TransmissionServiceClient interface {
-	UploadObject(ctx context.Context, in *UploadObjectRequest, opts ...grpc.CallOption) (*UploadObjectResponse, error)
+	UploadObject(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[UploadObjectRequestChunk, UploadObjectResponse], error)
 	DownloadObject(ctx context.Context, in *DownloadObjectRequest, opts ...grpc.CallOption) (*DownloadObjectResponse, error)
 }
 
@@ -39,15 +39,18 @@ func NewTransmissionServiceClient(cc grpc.ClientConnInterface) TransmissionServi
 	return &transmissionServiceClient{cc}
 }
 
-func (c *transmissionServiceClient) UploadObject(ctx context.Context, in *UploadObjectRequest, opts ...grpc.CallOption) (*UploadObjectResponse, error) {
+func (c *transmissionServiceClient) UploadObject(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[UploadObjectRequestChunk, UploadObjectResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UploadObjectResponse)
-	err := c.cc.Invoke(ctx, TransmissionService_UploadObject_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TransmissionService_ServiceDesc.Streams[0], TransmissionService_UploadObject_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &grpc.GenericClientStream[UploadObjectRequestChunk, UploadObjectResponse]{ClientStream: stream}
+	return x, nil
 }
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type TransmissionService_UploadObjectClient = grpc.ClientStreamingClient[UploadObjectRequestChunk, UploadObjectResponse]
 
 func (c *transmissionServiceClient) DownloadObject(ctx context.Context, in *DownloadObjectRequest, opts ...grpc.CallOption) (*DownloadObjectResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -63,7 +66,7 @@ func (c *transmissionServiceClient) DownloadObject(ctx context.Context, in *Down
 // All implementations must embed UnimplementedTransmissionServiceServer
 // for forward compatibility.
 type TransmissionServiceServer interface {
-	UploadObject(context.Context, *UploadObjectRequest) (*UploadObjectResponse, error)
+	UploadObject(grpc.ClientStreamingServer[UploadObjectRequestChunk, UploadObjectResponse]) error
 	DownloadObject(context.Context, *DownloadObjectRequest) (*DownloadObjectResponse, error)
 	mustEmbedUnimplementedTransmissionServiceServer()
 }
@@ -75,8 +78,8 @@ type TransmissionServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedTransmissionServiceServer struct{}
 
-func (UnimplementedTransmissionServiceServer) UploadObject(context.Context, *UploadObjectRequest) (*UploadObjectResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UploadObject not implemented")
+func (UnimplementedTransmissionServiceServer) UploadObject(grpc.ClientStreamingServer[UploadObjectRequestChunk, UploadObjectResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method UploadObject not implemented")
 }
 func (UnimplementedTransmissionServiceServer) DownloadObject(context.Context, *DownloadObjectRequest) (*DownloadObjectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DownloadObject not implemented")
@@ -102,23 +105,12 @@ func RegisterTransmissionServiceServer(s grpc.ServiceRegistrar, srv Transmission
 	s.RegisterService(&TransmissionService_ServiceDesc, srv)
 }
 
-func _TransmissionService_UploadObject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UploadObjectRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransmissionServiceServer).UploadObject(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: TransmissionService_UploadObject_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransmissionServiceServer).UploadObject(ctx, req.(*UploadObjectRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+func _TransmissionService_UploadObject_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(TransmissionServiceServer).UploadObject(&grpc.GenericServerStream[UploadObjectRequestChunk, UploadObjectResponse]{ServerStream: stream})
 }
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type TransmissionService_UploadObjectServer = grpc.ClientStreamingServer[UploadObjectRequestChunk, UploadObjectResponse]
 
 func _TransmissionService_DownloadObject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DownloadObjectRequest)
@@ -146,14 +138,16 @@ var TransmissionService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TransmissionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UploadObject",
-			Handler:    _TransmissionService_UploadObject_Handler,
-		},
-		{
 			MethodName: "DownloadObject",
 			Handler:    _TransmissionService_DownloadObject_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "UploadObject",
+			Handler:       _TransmissionService_UploadObject_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "transmission.proto",
 }

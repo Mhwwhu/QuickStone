@@ -1,0 +1,20 @@
+syntax = "proto3";
+package rpc.metadata;
+option go_package = "QuickStone/src/rpc/metadata";
+
+message RegisterUploadingObjectRequest {
+    uint64 target_user_id = 1;
+    string bucket = 2;
+    string key = 3;
+    string upload_timestamp = 4;
+    uint64 user_id = 5;
+}
+
+message RegisterUploadingObjectResponse {
+    uint32 status_code = 1;
+    string status_msg = 2;
+}
+
+service MetadataService {
+    rpc RegisterUploadingObject(RegisterUploadingObjectRequest) returns(RegisterUploadingObjectResponse);
+}

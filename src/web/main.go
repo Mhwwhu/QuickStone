@@ -6,11 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mhwwhu/QuickStone/src/config"
 	"github.com/mhwwhu/QuickStone/src/web/auth"
+	"github.com/mhwwhu/QuickStone/src/web/middleware"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	g := gin.Default()
+
+	g.Use(middleware.Authenticate)
 
 	rootPath := g.Group("/")
 
