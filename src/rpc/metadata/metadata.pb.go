@@ -23,11 +23,11 @@ const (
 
 type RegisterUploadingObjectRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	TargetUserId    uint64                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"`
+	TargetUserId    uint32                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"`
 	Bucket          string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	Key             string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 	UploadTimestamp string                 `protobuf:"bytes,4,opt,name=upload_timestamp,json=uploadTimestamp,proto3" json:"upload_timestamp,omitempty"`
-	UserId          uint64                 `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId          uint32                 `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -62,7 +62,7 @@ func (*RegisterUploadingObjectRequest) Descriptor() ([]byte, []int) {
 	return file_metadata_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *RegisterUploadingObjectRequest) GetTargetUserId() uint64 {
+func (x *RegisterUploadingObjectRequest) GetTargetUserId() uint32 {
 	if x != nil {
 		return x.TargetUserId
 	}
@@ -90,7 +90,7 @@ func (x *RegisterUploadingObjectRequest) GetUploadTimestamp() string {
 	return ""
 }
 
-func (x *RegisterUploadingObjectRequest) GetUserId() uint64 {
+func (x *RegisterUploadingObjectRequest) GetUserId() uint32 {
 	if x != nil {
 		return x.UserId
 	}
@@ -155,11 +155,11 @@ const file_metadata_proto_rawDesc = "" +
 	"\n" +
 	"\x0emetadata.proto\x12\frpc.metadata\"\xb4\x01\n" +
 	"\x1eRegisterUploadingObjectRequest\x12$\n" +
-	"\x0etarget_user_id\x18\x01 \x01(\x04R\ftargetUserId\x12\x16\n" +
+	"\x0etarget_user_id\x18\x01 \x01(\rR\ftargetUserId\x12\x16\n" +
 	"\x06bucket\x18\x02 \x01(\tR\x06bucket\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\x12)\n" +
 	"\x10upload_timestamp\x18\x04 \x01(\tR\x0fuploadTimestamp\x12\x17\n" +
-	"\auser_id\x18\x05 \x01(\x04R\x06userId\"a\n" +
+	"\auser_id\x18\x05 \x01(\rR\x06userId\"a\n" +
 	"\x1fRegisterUploadingObjectResponse\x12\x1f\n" +
 	"\vstatus_code\x18\x01 \x01(\rR\n" +
 	"statusCode\x12\x1d\n" +

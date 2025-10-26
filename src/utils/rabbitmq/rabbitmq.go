@@ -3,7 +3,8 @@ package rabbitmq
 import (
 	"fmt"
 
-	"github.com/mhwwhu/QuickStone/src/config"
+	"QuickStone/src/config"
+
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 

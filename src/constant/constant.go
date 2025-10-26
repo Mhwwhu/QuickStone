@@ -1,5 +1,9 @@
 package constant
 
-import "github.com/mhwwhu/QuickStone/src/common"
+import "QuickStone/src/common"
 
 const CtxUserIdKey common.CtxKeyT = "UserId"
+const CtxUserNameKey common.CtxKeyT = "UserName"
+const CtxClaimKey common.CtxKeyT = "Claim"
+const StatusCodeKey string = "status_code"
+const StatusMsgKey string = "status_msg"

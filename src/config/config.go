@@ -18,12 +18,24 @@ type envConfig struct {
 	RabbitMQPassword    string `env:"RABBITMQ_PASSWORD" envDefault:"123456"`
 	RabbitMQPort        uint32 `env:"RABBITMQ_PORT" envDefault:"5672"`
 	RabbitMQVHostPrefix string `env:"RABBITMQ_VHOST_PREFIX" envDefault:""`
+
+	FsRootPath  string `env:"FS_ROOT_PATH" envDefault:"/tmp"`
+	StorageType string `env:"STORAGE_TYPE" envDefault:"fs"`
+
+	PostgreSQLAddr        string `env:"PG_ADDR" envDefault:"localhost"`
+	PostgreSQLPort        uint32 `env:"PG_PORT" envDefault:"5432"`
+	PostgreSQLTablePrefix string `env:"PG_TABLE_PREFIX" envDefault:""`
+	PostgreSQLUser        string `env:"PG_USER" envDefault:"QuickStone"`
+	PostgreSQLPassword    string `env:"PG_PWD" envDefault:"123456"`
+	PostgreSQLDatabase    string `env:"PG_DATABASE" envDefault:"QuickStone"`
+
+	JwtSecretKey string `env:"JWT_SECRET_KEY" envDefault:"123456"`
 }
 
 const WebServiceName = "Web-service"
 const WebServicePort = 10001
-const AuthServerName = "Auth-service"
-const AuthServerPort = 10002
+const UserServerName = "User-service"
+const UserServerPort = 10002
 const TransmissionServerName = "Transmission-service"
 const TransmissionServerPort = 10003
 const MetadataServerName = "Metadata-service"

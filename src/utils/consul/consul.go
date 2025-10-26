@@ -3,7 +3,7 @@ package consul
 import (
 	"fmt"
 
-	"github.com/mhwwhu/QuickStone/src/config"
+	"QuickStone/src/config"
 
 	"github.com/google/uuid"
 	capi "github.com/hashicorp/consul/api"

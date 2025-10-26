@@ -23,7 +23,7 @@ const (
 
 type UploadObjectRequestHeader struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	TargetUserId  uint64                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"` // 定位到要将对象上传到哪个用户的存储资源下
+	TargetUserId  uint32                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"` // 定位到要将对象上传到哪个用户的存储资源下
 	Bucket        string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 	ObjectType    string                 `protobuf:"bytes,4,opt,name=object_type,json=objectType,proto3" json:"object_type,omitempty"`
@@ -62,7 +62,7 @@ func (*UploadObjectRequestHeader) Descriptor() ([]byte, []int) {
 	return file_transmission_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *UploadObjectRequestHeader) GetTargetUserId() uint64 {
+func (x *UploadObjectRequestHeader) GetTargetUserId() uint32 {
 	if x != nil {
 		return x.TargetUserId
 	}
@@ -285,7 +285,7 @@ func (x *UploadObjectResponse) GetStatusMsg() string {
 
 type DownloadObjectRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	TargetUserId  uint64                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"`
+	TargetUserId  uint32                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"`
 	Bucket        string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -322,7 +322,7 @@ func (*DownloadObjectRequest) Descriptor() ([]byte, []int) {
 	return file_transmission_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *DownloadObjectRequest) GetTargetUserId() uint64 {
+func (x *DownloadObjectRequest) GetTargetUserId() uint32 {
 	if x != nil {
 		return x.TargetUserId
 	}
@@ -409,7 +409,7 @@ const file_transmission_proto_rawDesc = "" +
 	"\n" +
 	"\x12transmission.proto\x12\x10rpc.transmission\"\xad\x01\n" +
 	"\x19UploadObjectRequestHeader\x12$\n" +
-	"\x0etarget_user_id\x18\x01 \x01(\x04R\ftargetUserId\x12\x16\n" +
+	"\x0etarget_user_id\x18\x01 \x01(\rR\ftargetUserId\x12\x16\n" +
 	"\x06bucket\x18\x02 \x01(\tR\x06bucket\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\x12\x1f\n" +
 	"\vobject_type\x18\x04 \x01(\tR\n" +
@@ -429,7 +429,7 @@ const file_transmission_proto_rawDesc = "" +
 	"\n" +
 	"status_msg\x18\x02 \x01(\tR\tstatusMsg\"g\n" +
 	"\x15DownloadObjectRequest\x12$\n" +
-	"\x0etarget_user_id\x18\x01 \x01(\x04R\ftargetUserId\x12\x16\n" +
+	"\x0etarget_user_id\x18\x01 \x01(\rR\ftargetUserId\x12\x16\n" +
 	"\x06bucket\x18\x02 \x01(\tR\x06bucket\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\"p\n" +
 	"\x16DownloadObjectResponse\x12\x1f\n" +

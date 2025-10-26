@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/mhwwhu/QuickStone/src/rpc/metadata"
+	"QuickStone/src/rpc/metadata"
 )
 
 type MetadataService struct {

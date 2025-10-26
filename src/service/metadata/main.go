@@ -7,9 +7,10 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/mhwwhu/QuickStone/src/config"
-	"github.com/mhwwhu/QuickStone/src/rpc/metadata"
-	"github.com/mhwwhu/QuickStone/src/utils/consul"
+	"QuickStone/src/config"
+	"QuickStone/src/rpc/metadata"
+	"QuickStone/src/utils/consul"
+
 	"github.com/oklog/run"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -44,7 +45,7 @@ func main() {
 	}, func(err error) {
 		s.GracefulStop()
 		s.Stop()
-		logrus.Errorf("Rpc %s listening error: %v", config.AuthServerName, err)
+		logrus.Errorf("Rpc %s listening error: %v", config.TransmissionServerName, err)
 	})
 
 	g.Add(run.SignalHandler(context.Background(), syscall.SIGINT, syscall.SIGTERM))

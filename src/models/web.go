@@ -1,6 +1,8 @@
 package models
 
-import "github.com/mhwwhu/QuickStone/src/common"
+import "QuickStone/src/common"
+
+// 对接客户端和网关的数据模型
 
 type LoginRequest struct {
 	UserName string `form:"username" binding:"required"`
@@ -36,7 +38,7 @@ type UploadObjectRequest struct {
 type UploadObjectResponse struct {
 	StatusCode common.StatusCodeT `json:"status_code"`
 	StatusMsg  string             `json:"status_msg"`
-	ObjectSize int                `json:"object_size"`
+	ObjectSize common.ObjectSizeT `json:"object_size"`
 }
 
 type DownloadObjectRequest struct {

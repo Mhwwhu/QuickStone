@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"time"
 
+	"QuickStone/src/config"
+
 	_ "github.com/mbobakov/grpc-consul-resolver"
-	"github.com/mhwwhu/QuickStone/src/config"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

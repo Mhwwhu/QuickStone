@@ -5,13 +5,15 @@ import (
 	"io"
 	"net/http"
 
+	"QuickStone/src/config"
+	"QuickStone/src/constant"
+	"QuickStone/src/models"
+	"QuickStone/src/rpc/metadata"
+	trans "QuickStone/src/rpc/transmission"
+	grpcutil "QuickStone/src/utils/grpc"
+	"QuickStone/src/utils/jwt"
+
 	"github.com/gin-gonic/gin"
-	"github.com/mhwwhu/QuickStone/src/config"
-	"github.com/mhwwhu/QuickStone/src/constant"
-	"github.com/mhwwhu/QuickStone/src/models"
-	"github.com/mhwwhu/QuickStone/src/rpc/metadata"
-	trans "github.com/mhwwhu/QuickStone/src/rpc/transmission"
-	grpcutil "github.com/mhwwhu/QuickStone/src/utils/grpc"
 	"github.com/sirupsen/logrus"
 )
 
@@ -24,8 +26,12 @@ func init() {
 }
 
 func UploadObjectHandle(c *gin.Context) {
-	userId := c.GetUint64(constant.CtxUserIdKey)
+	claim, _ := c.Get(constant.CtxClaimKey)
+	userId := claim.(jwt.Claims).UserID
+	userName := claim.(jwt.Claims).Username
 	ctx := context.WithValue(c.Request.Context(), constant.CtxUserIdKey, userId)
+	ctx = context.WithValue(ctx, constant.CtxUserNameKey, userName)
+
 	var req models.UploadObjectRequest
 	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusOK, models.UploadObjectResponse{
