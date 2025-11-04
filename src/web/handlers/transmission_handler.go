@@ -139,3 +139,13 @@ func UploadObjectHandle(c *gin.Context) {
 		return
 	}
 }
+
+func GetBucketsHandle(c *gin.Context) {
+
+	c.JSON(http.StatusOK, gin.H{
+		"status_code": 0,
+		"status_msg":  "success",
+		"bucket_list": "",
+		"bucket_num":  9,
+	})
+}
