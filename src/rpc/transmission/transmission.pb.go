@@ -7,11 +7,12 @@
 package transmission
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -22,14 +23,14 @@ const (
 )
 
 type UploadObjectRequestHeader struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TargetUserId  uint32                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"` // 定位到要将对象上传到哪个用户的存储资源下
-	Bucket        string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
-	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
-	ObjectType    string                 `protobuf:"bytes,4,opt,name=object_type,json=objectType,proto3" json:"object_type,omitempty"`
-	ObjectSize    uint64                 `protobuf:"varint,5,opt,name=object_size,json=objectSize,proto3" json:"object_size,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	TargetUserName string                 `protobuf:"bytes,1,opt,name=target_user_name,json=targetUserName,proto3" json:"target_user_name"` // 定位到要将对象上传到哪个用户的存储资源下
+	Bucket         string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket"`
+	Key            string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key"`
+	ObjectType     string                 `protobuf:"bytes,4,opt,name=object_type,json=objectType,proto3" json:"object_type"`
+	ObjectSize     uint64                 `protobuf:"varint,5,opt,name=object_size,json=objectSize,proto3" json:"object_size"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *UploadObjectRequestHeader) Reset() {
@@ -62,11 +63,11 @@ func (*UploadObjectRequestHeader) Descriptor() ([]byte, []int) {
 	return file_transmission_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *UploadObjectRequestHeader) GetTargetUserId() uint32 {
+func (x *UploadObjectRequestHeader) GetTargetUserName() string {
 	if x != nil {
-		return x.TargetUserId
+		return x.TargetUserName
 	}
-	return 0
+	return ""
 }
 
 func (x *UploadObjectRequestHeader) GetBucket() string {
@@ -99,8 +100,8 @@ func (x *UploadObjectRequestHeader) GetObjectSize() uint64 {
 
 type UploadObjectRequestBody struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SeriesNo      uint32                 `protobuf:"varint,1,opt,name=series_no,json=seriesNo,proto3" json:"series_no,omitempty"`
-	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	SeriesNo      uint32                 `protobuf:"varint,1,opt,name=series_no,json=seriesNo,proto3" json:"series_no"`
+	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -233,8 +234,8 @@ func (*UploadObjectRequestChunk_Data) isUploadObjectRequestChunk_Payload() {}
 
 type UploadObjectResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
-	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
+	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
+	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -284,12 +285,12 @@ func (x *UploadObjectResponse) GetStatusMsg() string {
 }
 
 type DownloadObjectRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TargetUserId  uint32                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id,omitempty"`
-	Bucket        string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
-	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	TargetUserName string                 `protobuf:"bytes,1,opt,name=target_user_name,json=targetUserName,proto3" json:"target_user_name"`
+	Bucket         string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket"`
+	Key            string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *DownloadObjectRequest) Reset() {
@@ -322,11 +323,11 @@ func (*DownloadObjectRequest) Descriptor() ([]byte, []int) {
 	return file_transmission_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *DownloadObjectRequest) GetTargetUserId() uint32 {
+func (x *DownloadObjectRequest) GetTargetUserName() string {
 	if x != nil {
-		return x.TargetUserId
+		return x.TargetUserName
 	}
-	return 0
+	return ""
 }
 
 func (x *DownloadObjectRequest) GetBucket() string {
@@ -345,9 +346,9 @@ func (x *DownloadObjectRequest) GetKey() string {
 
 type DownloadObjectResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
-	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
-	Object        []byte                 `protobuf:"bytes,3,opt,name=object,proto3" json:"object,omitempty"`
+	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
+	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`
+	Object        []byte                 `protobuf:"bytes,3,opt,name=object,proto3" json:"object"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -407,9 +408,9 @@ var File_transmission_proto protoreflect.FileDescriptor
 
 const file_transmission_proto_rawDesc = "" +
 	"\n" +
-	"\x12transmission.proto\x12\x10rpc.transmission\"\xad\x01\n" +
-	"\x19UploadObjectRequestHeader\x12$\n" +
-	"\x0etarget_user_id\x18\x01 \x01(\rR\ftargetUserId\x12\x16\n" +
+	"\x12transmission.proto\x12\x10rpc.transmission\"\xb1\x01\n" +
+	"\x19UploadObjectRequestHeader\x12(\n" +
+	"\x10target_user_name\x18\x01 \x01(\tR\x0etargetUserName\x12\x16\n" +
 	"\x06bucket\x18\x02 \x01(\tR\x06bucket\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\x12\x1f\n" +
 	"\vobject_type\x18\x04 \x01(\tR\n" +
@@ -427,9 +428,9 @@ const file_transmission_proto_rawDesc = "" +
 	"\vstatus_code\x18\x01 \x01(\rR\n" +
 	"statusCode\x12\x1d\n" +
 	"\n" +
-	"status_msg\x18\x02 \x01(\tR\tstatusMsg\"g\n" +
-	"\x15DownloadObjectRequest\x12$\n" +
-	"\x0etarget_user_id\x18\x01 \x01(\rR\ftargetUserId\x12\x16\n" +
+	"status_msg\x18\x02 \x01(\tR\tstatusMsg\"k\n" +
+	"\x15DownloadObjectRequest\x12(\n" +
+	"\x10target_user_name\x18\x01 \x01(\tR\x0etargetUserName\x12\x16\n" +
 	"\x06bucket\x18\x02 \x01(\tR\x06bucket\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\"p\n" +
 	"\x16DownloadObjectResponse\x12\x1f\n" +

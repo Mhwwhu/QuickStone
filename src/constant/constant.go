@@ -1,9 +1,6 @@
 package constant
 
-import "QuickStone/src/common"
-
-const CtxUserIdKey common.CtxKeyT = "UserId"
-const CtxUserNameKey common.CtxKeyT = "UserName"
-const CtxClaimKey common.CtxKeyT = "Claim"
+const CtxUserIdKey string = "UserId"
+const CtxUserNameKey string = "UserName"
 const StatusCodeKey string = "status_code"
 const StatusMsgKey string = "status_msg"

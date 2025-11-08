@@ -23,6 +23,7 @@ func JwtTokenAuth(c *gin.Context) {
 		})
 		c.Abort()
 	}
-	c.Set(constant.CtxClaimKey, claims)
+	c.Set(constant.CtxUserIdKey, claims.UserID)
+	c.Set(constant.CtxUserNameKey, claims.Username)
 	c.Next()
 }

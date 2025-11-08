@@ -29,3 +29,13 @@ const (
 	UnauthorizedErrorCode = 6
 	UnauthorizedError     = "Visiting is not authorized. Please login."
 )
+
+const (
+	BucketExistsErrorCode = 7
+	BucketExistsError     = "Bucket exists, choose another bucket name."
+)
+
+const (
+	BucketNotExistsErrorCode = 8
+	BucketNotExistsError     = "Bucket not exists!"
+)

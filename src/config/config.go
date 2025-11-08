@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -40,8 +42,14 @@ const TransmissionServerName = "Transmission-service"
 const TransmissionServerPort = 10003
 const MetadataServerName = "Metadata-service"
 const MetadataServerPort = 10004
+const BucketServerName = "Bucket-service"
+const BucketServerPort = 10005
 
 const GrpcStreamUploadSliceSize = 1024 * 256
+const FreeCacheSize = 10 * 1024 * 1024
+const FreeCacheDefaultExpireSeconds = 10 * 60
+
+const TimeFormat = time.RFC3339
 
 func init() {
 	if err := godotenv.Load(); err != nil {

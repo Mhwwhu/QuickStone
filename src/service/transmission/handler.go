@@ -32,9 +32,9 @@ func (s TransmissionService) UploadObject(stream trans.TransmissionService_Uploa
 
 	head := req.GetHeader()
 	storagePath := common.StoragePath{
-		UserId: head.TargetUserId,
-		Bucket: head.Bucket,
-		Key:    head.Key,
+		UserName: head.TargetUserName,
+		Bucket:   head.Bucket,
+		Key:      head.Key,
 	}
 
 	var buf bytes.Buffer

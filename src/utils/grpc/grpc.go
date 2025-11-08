@@ -25,6 +25,7 @@ func Connect(serviceName string) (conn *grpc.ClientConn) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		grpc.WithKeepaliveParams(kacp),
+		grpc.WithNoProxy(),
 	)
 
 	logrus.Debugf("connect %s", serviceName)

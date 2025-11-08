@@ -1,5 +1,7 @@
 package common
 
+import "strconv"
+
 type StatusCodeT = uint32
 type UserIdT = uint32
 type ObjectSizeT = uint64
@@ -7,7 +9,12 @@ type ObjectSizeT = uint64
 type CtxKeyT string
 
 type StoragePath struct {
-	UserId UserIdT
-	Bucket string
-	Key    string
+	UserName string
+	Bucket   string
+	Key      string
+}
+
+func AtoUserIdT(str string) UserIdT {
+	userIdInt, _ := strconv.Atoi(str)
+	return UserIdT(userIdInt)
 }

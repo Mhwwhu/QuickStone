@@ -3,6 +3,7 @@ package jwt
 import (
 	"QuickStone/src/common"
 	"QuickStone/src/config"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -41,16 +42,19 @@ func GetToken(userId common.UserIdT, userName string) string {
 }
 
 func VerifyToken(token string) (Claims, error) {
-	parsedToken, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+	claims := &Claims{}
+
+	tok, err := jwt.ParseWithClaims(token, claims, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
 		return jwtKey, nil
 	})
-
 	if err != nil {
 		return Claims{}, err
 	}
-
-	if claims, ok := parsedToken.Claims.(Claims); ok && parsedToken.Valid {
-		return claims, nil
+	if !tok.Valid {
+		return Claims{}, nil
 	}
-	return Claims{}, err
+	return *claims, nil
 }

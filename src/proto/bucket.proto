@@ -1,0 +1,63 @@
+syntax = "proto3";
+package rpc.bucket;
+option go_package = "QuickStone/src/rpc/bucket";
+
+enum StorageType {
+    STANDARD = 0;
+    LOW_FREQ = 1;
+}
+
+enum BucketACLType {
+    PRIVATE = 0;
+    PUBLIC_READ = 1;
+    PUBLIC = 2;
+}
+
+message CreateBucketRequest {
+    string bucket = 1;
+    string area = 2; //桶的存储服务器所在地
+    StorageType storage_type = 3;
+    BucketACLType acl_type = 4;
+}
+
+message CreateBucketResponse {
+    uint32 status_code = 1;
+    string status_msg = 2;
+    string create_timestamp = 3;
+}
+
+message DeleteBucketRequest {
+    string bucket = 1;
+}
+
+message DeleteBucketResponse {
+    uint32 status_code = 1;
+    string status_msg = 2;
+}
+
+message ShowBucketRequest {
+    string user_name = 1;
+    string bucket = 2;
+}
+
+message ShowBucketResponse {
+    uint32 status_code = 1;
+    string status_msg = 2;
+    string area = 3; //桶的存储服务器所在地
+    StorageType storage_type = 4;
+    BucketACLType acl_type = 5;
+    string create_timestamp = 6;
+}
+
+// message SetBucketACLRequest {
+//     string bucket = 1;
+//     BucketACLType acl_type = 2;
+//     repeated int32 write_whitelist = 3;
+//     repeated int32 read_
+// }
+
+service BucketService {
+    rpc CreateBucket(CreateBucketRequest) returns(CreateBucketResponse);
+    rpc DeleteBucket(DeleteBucketRequest) returns(DeleteBucketResponse);
+    rpc ShowBucket(ShowBucketRequest) returns(ShowBucketResponse);
+}

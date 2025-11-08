@@ -14,7 +14,7 @@ import (
 type FSStorage struct{}
 
 func (FSStorage) UploadObject(ctx context.Context, path common.StoragePath, reader io.Reader) error {
-	localPath := fmt.Sprintf("%s/%d/%s/%s", config.EnvCfg.FsRootPath, path.UserId, path.Bucket, path.Key)
+	localPath := fmt.Sprintf("%s/%s/%s/%s", config.EnvCfg.FsRootPath, path.UserName, path.Bucket, path.Key)
 	// 创建目标文件的所有目录
 	if err := os.MkdirAll(filepath.Dir(localPath), os.ModePerm); err != nil {
 		return fmt.Errorf("failed to create directories for path %s: %w", localPath, err)

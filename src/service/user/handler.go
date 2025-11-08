@@ -95,7 +95,7 @@ func (a UserService) Register(ctx context.Context, req *user.RegisterRequest) (r
 	userModel.Password = hashedPassword
 	result = database.Client.WithContext(ctx).Create(&userModel)
 	if result.Error != nil {
-		logrus.Errorf("Database operation failed: %v", err)
+		logrus.Errorf("Database operation failed: %v", result.Error)
 		resp = &user.RegisterResponse{
 			StatusCode: constant.DatabaseErrorCode,
 			Uid:        0,
