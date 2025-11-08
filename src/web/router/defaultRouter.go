@@ -16,17 +16,18 @@ func InitDefaultRouter(router *gin.Engine) {
 		//登入注册
 		userRouter.POST("/login", user.LoginHandle)
 		userRouter.POST("/register", user.RegisterHandle)
-		userRouter.GET("/checklogin", user.CheckLoginHandle)
+		userRouter.POST("/logout", user.LogoutHandle)
 	}
 
 	storageRouter := router.Group("/storage", middleware.JwtTokenAuth)
 	{
 		storageRouter.POST("/upload", trans.UploadObjectHandle)
-	}
 
-	bucketRouter := router.Group("/bucket", middleware.JwtTokenAuth)
-	{
-		bucketRouter.POST("/create", bucket.CreateBucketHandle)
-		bucketRouter.GET("/info", bucket.ShowBucketHandle)
+		bucketRouter := storageRouter.Group("/bucket")
+		{
+			bucketRouter.POST("/create", bucket.CreateBucketHandle)
+			bucketRouter.GET("/info", bucket.ShowBucketHandle)
+			bucketRouter.POST("/overview", bucket.OverviewHandle)
+		}
 	}
 }

@@ -9,7 +9,6 @@ import (
 	"QuickStone/src/rpc/user"
 	grpcutil "QuickStone/src/utils/grpc"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -167,27 +166,10 @@ func LoginHandle(c *gin.Context) {
 	})
 }
 
-func CheckLoginHandle(c *gin.Context) {
-	session := sessions.Default(c)
+func LogoutHandle(c *gin.Context) {
 
-	// 从 session 里获取用户信息
-	username := session.Get("username")
-	userid := session.Get("userid")
-
-	if username == nil || userid == nil {
-		// session 无效或未登录
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"status_code": 401,
-			"status_msg":  "user not logged in",
-		})
-		return
-	}
-
-	// session 有效，用户已登录
 	c.JSON(http.StatusOK, gin.H{
-		"status_code": http.StatusOK,
-		"status_msg":  "user logged in",
-		"user_id":     userid,
-		"username":    username,
+		"status_code": 0,
+		"status_msg":  "logout success",
 	})
 }

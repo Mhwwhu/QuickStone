@@ -27,9 +27,9 @@ type envConfig struct {
 	PostgreSQLAddr        string `env:"PG_ADDR" envDefault:"localhost"`
 	PostgreSQLPort        uint32 `env:"PG_PORT" envDefault:"5432"`
 	PostgreSQLTablePrefix string `env:"PG_TABLE_PREFIX" envDefault:""`
-	PostgreSQLUser        string `env:"PG_USER" envDefault:"QuickStone"`
+	PostgreSQLUser        string `env:"PG_USER" envDefault:"quickstone"`
 	PostgreSQLPassword    string `env:"PG_PWD" envDefault:"123456"`
-	PostgreSQLDatabase    string `env:"PG_DATABASE" envDefault:"QuickStone"`
+	PostgreSQLDatabase    string `env:"PG_DATABASE" envDefault:"quickstone"`
 
 	JwtSecretKey string `env:"JWT_SECRET_KEY" envDefault:"123456"`
 }
