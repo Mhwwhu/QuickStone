@@ -2,20 +2,34 @@ package cache
 
 import (
 	"QuickStone/src/config"
-
-	"github.com/coocood/freecache"
+	"QuickStone/src/storage/redis"
+	"context"
+	"encoding/json"
 )
 
-var DefaultExpireSeconds int
-
-var cache *freecache.Cache
+// var c *cache.Cache
 
 func init() {
-	cacheSize := config.FreeCacheSize
-	DefaultExpireSeconds = config.FreeCacheDefaultExpireSeconds
-	cache = freecache.NewCache(cacheSize)
+	// c = cache.New(5*time.Minute, 10*time.Minute)
 }
 
-func Set(obj any) error {
-	return nil
+func Set(ctx context.Context, key string, obj interface{}) error {
+	b, err := json.Marshal(obj)
+	if err != nil {
+		return err
+	}
+	result := redis.Client.Set(ctx, key, b, config.RedisExpirationTime)
+	return result.Err()
+}
+
+func Get[T any](ctx context.Context, key string) *T {
+	obj, err := redis.Client.Get(ctx, key).Result()
+	if err != nil {
+		return nil
+	}
+	var v T
+	if err := json.Unmarshal([]byte(obj), &v); err != nil {
+		return nil
+	}
+	return &v
 }

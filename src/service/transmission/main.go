@@ -37,6 +37,7 @@ func main() {
 	trans.RegisterTransmissionServiceServer(s, srv)
 	healthServer := health.NewServer()
 	grpc_health_v1.RegisterHealthServer(s, healthServer)
+	defer CloseMQConn()
 
 	srv.Init()
 	g := &run.Group{}

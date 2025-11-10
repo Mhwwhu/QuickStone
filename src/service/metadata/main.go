@@ -2,16 +2,23 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net"
 	"os"
 	"syscall"
 
 	"QuickStone/src/config"
+	"QuickStone/src/constant"
+	"QuickStone/src/models/dbModels"
+	"QuickStone/src/models/msgModels"
 	"QuickStone/src/rpc/metadata"
+	"QuickStone/src/storage/database"
+	"QuickStone/src/utils/cache"
 	"QuickStone/src/utils/consul"
 
 	"github.com/oklog/run"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -37,8 +44,12 @@ func main() {
 	metadata.RegisterMetadataServiceServer(s, srv)
 	healthServer := health.NewServer()
 	grpc_health_v1.RegisterHealthServer(s, healthServer)
-
 	srv.Init()
+
+	// defer CloseMQConn()
+
+	go updateObjMeta(channel)
+
 	g := &run.Group{}
 	g.Add(func() error {
 		return s.Serve(lis)
@@ -55,5 +66,39 @@ func main() {
 			"err": err,
 		}).Errorf("Error when runing http server")
 		os.Exit(1)
+	}
+}
+
+func updateObjMeta(channel *amqp.Channel) {
+	msgs, _ := channel.Consume(
+		constant.ObjectMetaQueue,
+		"",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	for msg := range msgs {
+		evt := msgModels.Object{}
+		json.Unmarshal(msg.Body, &evt)
+		obj := dbModels.Object{
+			UserName:   evt.UserName,
+			BucketName: evt.Bucket,
+			Key:        evt.Key,
+			ObjectType: evt.ObjType,
+		}
+		switch evt.EventType {
+		case "stored":
+			result := database.Client.Create(&obj)
+			if result.Error != nil {
+				cache.Set(
+					context.Background(),
+					fmt.Sprintf("%s:register_upload:%s:%s:%s", constant.MetadataVarPrefix, evt.UserName, evt.Bucket, evt.Key),
+					false,
+				)
+			}
+		}
+		msg.Ack(false)
 	}
 }

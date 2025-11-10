@@ -8,7 +8,8 @@ import (
 	"QuickStone/src/common"
 	"QuickStone/src/config"
 	"QuickStone/src/constant"
-	"QuickStone/src/models"
+	"QuickStone/src/models/webModels"
+	meta "QuickStone/src/rpc/metadata"
 	trans "QuickStone/src/rpc/transmission"
 	grpcutil "QuickStone/src/utils/grpc"
 	"QuickStone/src/web/utils"
@@ -20,22 +21,25 @@ import (
 )
 
 var transClient trans.TransmissionServiceClient
+var metaClient meta.MetadataServiceClient
 
 func init() {
 	conn := grpcutil.Connect(config.TransmissionServerName)
 	transClient = trans.NewTransmissionServiceClient(conn)
+	conn2 := grpcutil.Connect(config.MetadataServerName)
+	metaClient = meta.NewMetadataServiceClient(conn2)
 }
 
 func UploadObjectHandle(c *gin.Context) {
 	ctx := utils.CreateCtxFromGin(c)
-	md, _ := metadata.FromIncomingContext(ctx)
+	md, _ := metadata.FromOutgoingContext(ctx)
 	userName := md.Get(constant.CtxUserNameKey)[0]
 	userId, _ := strconv.Atoi(md.Get(constant.CtxUserIdKey)[0])
 
-	var req models.UploadObjectRequest
+	var req webModels.UploadObjectRequest
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, models.UploadObjectResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.UploadObjectResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: constant.GateWayParamsErrorCode,
 				StatusMsg:  constant.GateWayParamsError,
 			},
@@ -57,8 +61,8 @@ func UploadObjectHandle(c *gin.Context) {
 	file, fileHeader, err := c.Request.FormFile("file")
 	if err != nil {
 		logrus.Fatalf("Cannot get file from request: %v", err)
-		c.JSON(http.StatusOK, models.UploadObjectResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.UploadObjectResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: constant.GateWayParamsErrorCode,
 				StatusMsg:  constant.GateWayParamsError,
 			},
@@ -72,26 +76,28 @@ func UploadObjectHandle(c *gin.Context) {
 	*/
 
 	// 2. 向stroage-meta模块发送预存储请求
-	// {
-	// 	res, err := MetaClient.RegisterUploadingObject(ctx, &metadata.RegisterUploadingObjectRequest{
-	// 		TargetUserId: req.TargetUserId,
-	// 		Bucket:       req.Bucket,
-	// 		Key:          req.Key,
-	// 		UserId:       userId,
-	// 	})
-	// 	if err != nil {
-	// 		logrus.WithFields(logrus.Fields{
-	// 			"UserId": userId,
-	// 			"Bucket": req.Bucket,
-	// 			"Key":    req.Key,
-	// 		}).Warnf("Error when trying to register uploading: %v", err)
-	// 		c.JSON(http.StatusOK, models.UploadObjectResponse{
-	// 			StatusCode: res.StatusCode,
-	// 			StatusMsg:  res.StatusMsg,
-	// 		})
-	// 		return
-	// 	}
-	// }
+	{
+		res, err := metaClient.RegisterUploadingObject(ctx, &meta.RegisterUploadingObjectRequest{
+			TargetUserName: req.TargetUserName,
+			Bucket:         req.Bucket,
+			Key:            req.Key,
+		})
+		if err != nil || res.StatusCode != 0 {
+			logrus.WithFields(logrus.Fields{
+				"UserId": userId,
+				"Bucket": req.Bucket,
+				"Key":    req.Key,
+			}).Warnf("Failed to register uploading: error=%v", err)
+			c.JSON(http.StatusOK, webModels.UploadObjectResponse{
+				StandardResponse: webModels.StandardResponse{
+					StatusCode: res.StatusCode,
+					StatusMsg:  res.StatusMsg,
+				},
+				ObjectSize: common.ObjectSizeT(fileHeader.Size),
+			})
+			return
+		}
+	}
 
 	// 3. 向transmission模块流式发送存储请求
 	{
@@ -140,8 +146,8 @@ func UploadObjectHandle(c *gin.Context) {
 				"Key":    req.Key,
 			}).Warnf("Error when trying to upload: %v", err)
 		}
-		c.JSON(http.StatusOK, models.UploadObjectResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.UploadObjectResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: res.StatusCode,
 				StatusMsg:  res.StatusMsg,
 			},

@@ -18,3 +18,9 @@ func AtoUserIdT(str string) UserIdT {
 	userIdInt, _ := strconv.Atoi(str)
 	return UserIdT(userIdInt)
 }
+
+func ExitOnErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}

@@ -39,3 +39,8 @@ const (
 	BucketNotExistsErrorCode = 8
 	BucketNotExistsError     = "Bucket not exists!"
 )
+
+const (
+	ObjectUploadConflictErrorCode = 9
+	ObjectUploadConflictError     = "Object upload conflict!"
+)

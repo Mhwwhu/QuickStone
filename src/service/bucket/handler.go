@@ -3,7 +3,7 @@ package main
 import (
 	"QuickStone/src/config"
 	"QuickStone/src/constant"
-	"QuickStone/src/models"
+	"QuickStone/src/models/dbModels"
 	"QuickStone/src/rpc/bucket"
 	"QuickStone/src/storage/database"
 	"context"
@@ -24,7 +24,7 @@ func (s BucketService) CreateBucket(ctx context.Context, req *bucket.CreateBucke
 	md, _ := metadata.FromIncomingContext(ctx)
 
 	resp = &bucket.CreateBucketResponse{}
-	var bucketModel models.Bucket
+	var bucketModel dbModels.Bucket
 	result := database.Client.WithContext(ctx).Limit(1).Where("name = ?", req.Bucket).Find(&bucketModel)
 	if result.RowsAffected != 0 {
 		logrus.Infof("Bucket %s already exists.", req.Bucket)
@@ -37,8 +37,8 @@ func (s BucketService) CreateBucket(ctx context.Context, req *bucket.CreateBucke
 
 	bucketModel.Name = req.Bucket
 	bucketModel.Area = req.Area
-	bucketModel.StorageType = models.StorageType(req.StorageType)
-	bucketModel.ACLType = models.ACLType(req.AclType)
+	bucketModel.StorageType = dbModels.StorageType(req.StorageType)
+	bucketModel.ACLType = dbModels.ACLType(req.AclType)
 	bucketModel.UserName = md.Get(constant.CtxUserNameKey)[0]
 	result = database.Client.WithContext(ctx).Create(&bucketModel)
 	if result.Error != nil {
@@ -67,7 +67,7 @@ func (s BucketService) DeleteBucket(ctx context.Context, req *bucket.DeleteBucke
 
 func (s BucketService) ShowBucket(ctx context.Context, req *bucket.ShowBucketRequest) (resp *bucket.ShowBucketResponse, err error) {
 	resp = &bucket.ShowBucketResponse{}
-	var bucketModel models.Bucket
+	var bucketModel dbModels.Bucket
 	result := database.Client.WithContext(ctx).Where("name = ?", req.Bucket).Find(&bucketModel)
 	if result.RowsAffected == 0 {
 		logrus.Infof("No matched buckets.")
@@ -80,5 +80,10 @@ func (s BucketService) ShowBucket(ctx context.Context, req *bucket.ShowBucketReq
 	resp.AclType = bucket.BucketACLType(bucketModel.ACLType)
 	resp.StorageType = bucket.StorageType(bucketModel.StorageType)
 	resp.CreateTimestamp = bucketModel.CreateTime.Format(config.TimeFormat)
+
+	var count int64
+	database.Client.WithContext(ctx).Where("user_name = ? and bucket_name = ?", req.UserName, req.Bucket).Count(&count)
+	resp.ObjectNum = uint32(count)
+
 	return
 }

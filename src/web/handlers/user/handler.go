@@ -5,7 +5,7 @@ import (
 
 	"QuickStone/src/config"
 	"QuickStone/src/constant"
-	"QuickStone/src/models"
+	"QuickStone/src/models/webModels"
 	"QuickStone/src/rpc/user"
 	grpcutil "QuickStone/src/utils/grpc"
 
@@ -69,10 +69,10 @@ func init() {
 // }
 
 func RegisterHandle(c *gin.Context) {
-	var req models.RegisterRequest
+	var req webModels.RegisterRequest
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, models.RegisterResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.RegisterResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: constant.GateWayParamsErrorCode,
 				StatusMsg:  constant.GateWayParamsError,
 			},
@@ -91,8 +91,8 @@ func RegisterHandle(c *gin.Context) {
 		logrus.WithFields(logrus.Fields{
 			"Username": req.UserName,
 		}).Info("Error when trying to register")
-		c.JSON(http.StatusOK, models.RegisterResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.RegisterResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: res.StatusCode,
 				StatusMsg:  res.StatusMsg,
 			},
@@ -107,8 +107,8 @@ func RegisterHandle(c *gin.Context) {
 		"StatusCode": res.StatusCode,
 	}).Infof("User %s has registered.", req.UserName)
 
-	c.JSON(http.StatusOK, models.RegisterResponse{
-		StandardResponse: models.StandardResponse{
+	c.JSON(http.StatusOK, webModels.RegisterResponse{
+		StandardResponse: webModels.StandardResponse{
 			StatusCode: res.StatusCode,
 			StatusMsg:  res.StatusMsg,
 		},
@@ -119,10 +119,10 @@ func RegisterHandle(c *gin.Context) {
 }
 
 func LoginHandle(c *gin.Context) {
-	var req models.LoginRequest
+	var req webModels.LoginRequest
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, models.LoginResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.LoginResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: constant.GateWayParamsErrorCode,
 				StatusMsg:  constant.GateWayParamsError,
 			},
@@ -141,8 +141,8 @@ func LoginHandle(c *gin.Context) {
 		logrus.WithFields(logrus.Fields{
 			"Username": req.UserName,
 		}).Infof("Error when trying to login: %v", err)
-		c.JSON(http.StatusOK, models.LoginResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.LoginResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: res.StatusCode,
 				StatusMsg:  res.StatusMsg,
 			},
@@ -156,8 +156,8 @@ func LoginHandle(c *gin.Context) {
 		"UserId":   res.Uid,
 	}).Infof("User %s has login.", req.UserName)
 
-	c.JSON(http.StatusOK, models.LoginResponse{
-		StandardResponse: models.StandardResponse{
+	c.JSON(http.StatusOK, webModels.LoginResponse{
+		StandardResponse: webModels.StandardResponse{
 			StatusCode: res.StatusCode,
 			StatusMsg:  res.StatusMsg,
 		},

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"QuickStone/src/constant"
-	"QuickStone/src/models"
+	"QuickStone/src/models/dbModels"
 	"QuickStone/src/rpc/user"
 	"QuickStone/src/storage/database"
 	"QuickStone/src/utils/jwt"
@@ -25,7 +25,7 @@ func (a UserService) Login(ctx context.Context, req *user.LoginRequest) (resp *u
 	logrus.Infof("Service %s is processing Login", ServerId)
 
 	resp = &user.LoginResponse{}
-	userModel := models.User{
+	userModel := dbModels.User{
 		Name: req.Username,
 	}
 
@@ -69,7 +69,7 @@ func (a UserService) Login(ctx context.Context, req *user.LoginRequest) (resp *u
 func (a UserService) Register(ctx context.Context, req *user.RegisterRequest) (resp *user.RegisterResponse, err error) {
 	logrus.Infof("Service %s is processing Register", ServerId)
 	resp = &user.RegisterResponse{}
-	var userModel models.User
+	var userModel dbModels.User
 	result := database.Client.WithContext(ctx).Limit(1).Where("name = ?", req.Username).Find(&userModel)
 	if result.RowsAffected != 0 {
 		logrus.Infof("User %s already exists.", req.Username)

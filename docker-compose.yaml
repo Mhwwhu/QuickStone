@@ -1,0 +1,58 @@
+services:
+  consul:
+    container_name: "QuickStone-Consul"
+    image: hashicorp/consul:1.21.5
+    command: [
+      "agent",
+      "-dev",
+      "-client=0.0.0.0"
+    ]
+    ports:
+      - "8500:8500"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/status/leader" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  redis:
+    container_name: "QuickStone-Redis"
+    image: redis:8.2.3
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  postgres:
+    container_name: "QuickStone-PostgreSQL"
+    image: postgres:18.0
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: QuickStone
+      POSTGRES_USER: QuickStone
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  rabbitmq:
+    container_name: "QuickStone-RabbitMQ"
+    image: rabbitmq:4.2
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: QuickStone
+      RABBITMQ_DEFAULT_PASS: 123456
+    healthcheck:
+      test: [ "CMD-SHELL", "rabbitmqctl status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5

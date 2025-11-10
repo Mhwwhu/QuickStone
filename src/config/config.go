@@ -15,7 +15,7 @@ type envConfig struct {
 	ConsulAddr          string `env:"CONSUL_ADDR" envDefault:"localhost"`
 	ConsulPort          uint32 `env:"CONSUL_PORT" envDefault:"8500"`
 	ConsulNamePrefix    string `env:"CONSUL_NAME_PREFIX" envDefault:""`
-	RabbitMQUserName    string `env:"RABBITMQ_USER_NAME" envDefault:"USER"`
+	RabbitMQUserName    string `env:"RABBITMQ_USER_NAME" envDefault:"QuickStone"`
 	RabbitMQAddr        string `env:"RABBITMQ_ADDR" envDefault:"localhost"`
 	RabbitMQPassword    string `env:"RABBITMQ_PASSWORD" envDefault:"123456"`
 	RabbitMQPort        uint32 `env:"RABBITMQ_PORT" envDefault:"5672"`
@@ -27,9 +27,14 @@ type envConfig struct {
 	PostgreSQLAddr        string `env:"PG_ADDR" envDefault:"localhost"`
 	PostgreSQLPort        uint32 `env:"PG_PORT" envDefault:"5432"`
 	PostgreSQLTablePrefix string `env:"PG_TABLE_PREFIX" envDefault:""`
-	PostgreSQLUser        string `env:"PG_USER" envDefault:"quickstone"`
+	PostgreSQLUser        string `env:"PG_USER" envDefault:"QuickStone"`
 	PostgreSQLPassword    string `env:"PG_PWD" envDefault:"123456"`
-	PostgreSQLDatabase    string `env:"PG_DATABASE" envDefault:"quickstone"`
+	PostgreSQLDatabase    string `env:"PG_DATABASE" envDefault:"QuickStone"`
+
+	RedisAddr     string `env:"REDIS_ADDR" envDefault:"localhost:6379"`
+	RedisPassword string `env:"REDIS_PWD" envDefault:"123456"`
+	RedisDB       int    `env:"REDIS_DB" envDefault:"0"`
+	RedisMaster   string `env:"REDIS_MASTER" envDefault:""`
 
 	JwtSecretKey string `env:"JWT_SECRET_KEY" envDefault:"123456"`
 }
@@ -46,8 +51,8 @@ const BucketServerName = "Bucket-service"
 const BucketServerPort = 10005
 
 const GrpcStreamUploadSliceSize = 1024 * 256
-const FreeCacheSize = 10 * 1024 * 1024
-const FreeCacheDefaultExpireSeconds = 10 * 60
+
+const RedisExpirationTime = 24 * time.Hour
 
 const TimeFormat = time.RFC3339
 

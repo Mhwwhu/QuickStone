@@ -3,7 +3,7 @@ package bucket
 import (
 	"QuickStone/src/config"
 	"QuickStone/src/constant"
-	"QuickStone/src/models"
+	"QuickStone/src/models/webModels"
 	"QuickStone/src/rpc/bucket"
 	grpcutil "QuickStone/src/utils/grpc"
 	"QuickStone/src/web/utils"
@@ -22,10 +22,10 @@ func init() {
 func CreateBucketHandle(c *gin.Context) {
 	ctx := utils.CreateCtxFromGin(c)
 
-	var req models.CreateBucketRequest
+	var req webModels.CreateBucketRequest
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, models.CreateBucketResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.CreateBucketResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: constant.GateWayParamsErrorCode,
 				StatusMsg:  constant.GateWayParamsError,
 			},
@@ -41,8 +41,8 @@ func CreateBucketHandle(c *gin.Context) {
 	})
 
 	if err != nil {
-		c.JSON(http.StatusOK, models.CreateBucketResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.CreateBucketResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: res.StatusCode,
 				StatusMsg:  res.StatusMsg,
 			},
@@ -50,8 +50,8 @@ func CreateBucketHandle(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, models.CreateBucketResponse{
-		StandardResponse: models.StandardResponse{
+	c.JSON(http.StatusOK, webModels.CreateBucketResponse{
+		StandardResponse: webModels.StandardResponse{
 			StatusCode: res.StatusCode,
 			StatusMsg:  res.StatusMsg,
 		},
@@ -62,10 +62,10 @@ func CreateBucketHandle(c *gin.Context) {
 func ShowBucketHandle(c *gin.Context) {
 	ctx := utils.CreateCtxFromGin(c)
 
-	var req models.ShowBucketRequest
+	var req webModels.ShowBucketRequest
 	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, models.ShowBucketResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.ShowBucketResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: constant.GateWayParamsErrorCode,
 				StatusMsg:  constant.GateWayParamsError,
 			},
@@ -79,8 +79,8 @@ func ShowBucketHandle(c *gin.Context) {
 	})
 
 	if err != nil {
-		c.JSON(http.StatusOK, models.ShowBucketResponse{
-			StandardResponse: models.StandardResponse{
+		c.JSON(http.StatusOK, webModels.ShowBucketResponse{
+			StandardResponse: webModels.StandardResponse{
 				StatusCode: res.StatusCode,
 				StatusMsg:  res.StatusMsg,
 			},
@@ -88,8 +88,8 @@ func ShowBucketHandle(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, models.ShowBucketResponse{
-		StandardResponse: models.StandardResponse{
+	c.JSON(http.StatusOK, webModels.ShowBucketResponse{
+		StandardResponse: webModels.StandardResponse{
 			StatusCode: res.StatusCode,
 			StatusMsg:  res.StatusMsg,
 		},
@@ -97,6 +97,7 @@ func ShowBucketHandle(c *gin.Context) {
 		Area:        res.Area,
 		ACLType:     bucket.BucketACLTypeUtil.ToString(res.AclType),
 		StorageType: bucket.StorageTypeUtil.ToString(res.StorageType),
+		ObjectNum:   res.ObjectNum,
 		Status:      "OK",
 	})
 }

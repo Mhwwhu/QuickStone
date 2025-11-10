@@ -7,12 +7,11 @@
 package bucket
 
 import (
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -119,10 +118,10 @@ func (BucketACLType) EnumDescriptor() ([]byte, []int) {
 
 type CreateBucketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Bucket        string                 `protobuf:"bytes,1,opt,name=bucket,proto3" json:"bucket"`
-	Area          string                 `protobuf:"bytes,2,opt,name=area,proto3" json:"area"` //桶的存储服务器所在地
-	StorageType   StorageType            `protobuf:"varint,3,opt,name=storage_type,json=storageType,proto3,enum=rpc.bucket.StorageType" json:"storage_type"`
-	AclType       BucketACLType          `protobuf:"varint,4,opt,name=acl_type,json=aclType,proto3,enum=rpc.bucket.BucketACLType" json:"acl_type"`
+	Bucket        string                 `protobuf:"bytes,1,opt,name=bucket,proto3" json:"bucket,omitempty"`
+	Area          string                 `protobuf:"bytes,2,opt,name=area,proto3" json:"area,omitempty"` //桶的存储服务器所在地
+	StorageType   StorageType            `protobuf:"varint,3,opt,name=storage_type,json=storageType,proto3,enum=rpc.bucket.StorageType" json:"storage_type,omitempty"`
+	AclType       BucketACLType          `protobuf:"varint,4,opt,name=acl_type,json=aclType,proto3,enum=rpc.bucket.BucketACLType" json:"acl_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -187,9 +186,9 @@ func (x *CreateBucketRequest) GetAclType() BucketACLType {
 
 type CreateBucketResponse struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	StatusCode      uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
-	StatusMsg       string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`
-	CreateTimestamp string                 `protobuf:"bytes,3,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp"`
+	StatusCode      uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
+	StatusMsg       string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
+	CreateTimestamp string                 `protobuf:"bytes,3,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -247,7 +246,7 @@ func (x *CreateBucketResponse) GetCreateTimestamp() string {
 
 type DeleteBucketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Bucket        string                 `protobuf:"bytes,1,opt,name=bucket,proto3" json:"bucket"`
+	Bucket        string                 `protobuf:"bytes,1,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -291,8 +290,8 @@ func (x *DeleteBucketRequest) GetBucket() string {
 
 type DeleteBucketResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
-	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`
+	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
+	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -343,8 +342,8 @@ func (x *DeleteBucketResponse) GetStatusMsg() string {
 
 type ShowBucketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserName      string                 `protobuf:"bytes,1,opt,name=user_name,json=userName,proto3" json:"user_name"`
-	Bucket        string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket"`
+	UserName      string                 `protobuf:"bytes,1,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
+	Bucket        string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -395,12 +394,13 @@ func (x *ShowBucketRequest) GetBucket() string {
 
 type ShowBucketResponse struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	StatusCode      uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
-	StatusMsg       string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`
-	Area            string                 `protobuf:"bytes,3,opt,name=area,proto3" json:"area"` //桶的存储服务器所在地
-	StorageType     StorageType            `protobuf:"varint,4,opt,name=storage_type,json=storageType,proto3,enum=rpc.bucket.StorageType" json:"storage_type"`
-	AclType         BucketACLType          `protobuf:"varint,5,opt,name=acl_type,json=aclType,proto3,enum=rpc.bucket.BucketACLType" json:"acl_type"`
-	CreateTimestamp string                 `protobuf:"bytes,6,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp"`
+	StatusCode      uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
+	StatusMsg       string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
+	Area            string                 `protobuf:"bytes,3,opt,name=area,proto3" json:"area,omitempty"` //桶的存储服务器所在地
+	StorageType     StorageType            `protobuf:"varint,4,opt,name=storage_type,json=storageType,proto3,enum=rpc.bucket.StorageType" json:"storage_type,omitempty"`
+	AclType         BucketACLType          `protobuf:"varint,5,opt,name=acl_type,json=aclType,proto3,enum=rpc.bucket.BucketACLType" json:"acl_type,omitempty"`
+	ObjectNum       uint32                 `protobuf:"varint,6,opt,name=object_num,json=objectNum,proto3" json:"object_num,omitempty"`
+	CreateTimestamp string                 `protobuf:"bytes,7,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -470,6 +470,13 @@ func (x *ShowBucketResponse) GetAclType() BucketACLType {
 	return BucketACLType_PRIVATE
 }
 
+func (x *ShowBucketResponse) GetObjectNum() uint32 {
+	if x != nil {
+		return x.ObjectNum
+	}
+	return 0
+}
+
 func (x *ShowBucketResponse) GetCreateTimestamp() string {
 	if x != nil {
 		return x.CreateTimestamp
@@ -503,7 +510,7 @@ const file_bucket_proto_rawDesc = "" +
 	"status_msg\x18\x02 \x01(\tR\tstatusMsg\"H\n" +
 	"\x11ShowBucketRequest\x12\x1b\n" +
 	"\tuser_name\x18\x01 \x01(\tR\buserName\x12\x16\n" +
-	"\x06bucket\x18\x02 \x01(\tR\x06bucket\"\x85\x02\n" +
+	"\x06bucket\x18\x02 \x01(\tR\x06bucket\"\xa4\x02\n" +
 	"\x12ShowBucketResponse\x12\x1f\n" +
 	"\vstatus_code\x18\x01 \x01(\rR\n" +
 	"statusCode\x12\x1d\n" +
@@ -511,8 +518,10 @@ const file_bucket_proto_rawDesc = "" +
 	"status_msg\x18\x02 \x01(\tR\tstatusMsg\x12\x12\n" +
 	"\x04area\x18\x03 \x01(\tR\x04area\x12:\n" +
 	"\fstorage_type\x18\x04 \x01(\x0e2\x17.rpc.bucket.StorageTypeR\vstorageType\x124\n" +
-	"\bacl_type\x18\x05 \x01(\x0e2\x19.rpc.bucket.BucketACLTypeR\aaclType\x12)\n" +
-	"\x10create_timestamp\x18\x06 \x01(\tR\x0fcreateTimestamp*)\n" +
+	"\bacl_type\x18\x05 \x01(\x0e2\x19.rpc.bucket.BucketACLTypeR\aaclType\x12\x1d\n" +
+	"\n" +
+	"object_num\x18\x06 \x01(\rR\tobjectNum\x12)\n" +
+	"\x10create_timestamp\x18\a \x01(\tR\x0fcreateTimestamp*)\n" +
 	"\vStorageType\x12\f\n" +
 	"\bSTANDARD\x10\x00\x12\f\n" +
 	"\bLOW_FREQ\x10\x01*9\n" +

@@ -46,7 +46,8 @@ message ShowBucketResponse {
     string area = 3; //桶的存储服务器所在地
     StorageType storage_type = 4;
     BucketACLType acl_type = 5;
-    string create_timestamp = 6;
+    uint32 object_num = 6;
+    string create_timestamp = 7;
 }
 
 // message SetBucketACLRequest {

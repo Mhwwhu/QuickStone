@@ -7,12 +7,11 @@
 package metadata
 
 import (
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -24,10 +23,10 @@ const (
 
 type RegisterUploadingObjectRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	TargetUserId    uint32                 `protobuf:"varint,1,opt,name=target_user_id,json=targetUserId,proto3" json:"target_user_id"`
-	Bucket          string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket"`
-	Key             string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key"`
-	UploadTimestamp string                 `protobuf:"bytes,4,opt,name=upload_timestamp,json=uploadTimestamp,proto3" json:"upload_timestamp"`
+	TargetUserName  string                 `protobuf:"bytes,1,opt,name=target_user_name,json=targetUserName,proto3" json:"target_user_name,omitempty"`
+	Bucket          string                 `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
+	Key             string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	UploadTimestamp string                 `protobuf:"bytes,4,opt,name=upload_timestamp,json=uploadTimestamp,proto3" json:"upload_timestamp,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -62,11 +61,11 @@ func (*RegisterUploadingObjectRequest) Descriptor() ([]byte, []int) {
 	return file_metadata_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *RegisterUploadingObjectRequest) GetTargetUserId() uint32 {
+func (x *RegisterUploadingObjectRequest) GetTargetUserName() string {
 	if x != nil {
-		return x.TargetUserId
+		return x.TargetUserName
 	}
-	return 0
+	return ""
 }
 
 func (x *RegisterUploadingObjectRequest) GetBucket() string {
@@ -92,8 +91,8 @@ func (x *RegisterUploadingObjectRequest) GetUploadTimestamp() string {
 
 type RegisterUploadingObjectResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
-	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`
+	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
+	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -146,9 +145,9 @@ var File_metadata_proto protoreflect.FileDescriptor
 
 const file_metadata_proto_rawDesc = "" +
 	"\n" +
-	"\x0emetadata.proto\x12\frpc.metadata\"\x9b\x01\n" +
-	"\x1eRegisterUploadingObjectRequest\x12$\n" +
-	"\x0etarget_user_id\x18\x01 \x01(\rR\ftargetUserId\x12\x16\n" +
+	"\x0emetadata.proto\x12\frpc.metadata\"\x9f\x01\n" +
+	"\x1eRegisterUploadingObjectRequest\x12(\n" +
+	"\x10target_user_name\x18\x01 \x01(\tR\x0etargetUserName\x12\x16\n" +
 	"\x06bucket\x18\x02 \x01(\tR\x06bucket\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\x12)\n" +
 	"\x10upload_timestamp\x18\x04 \x01(\tR\x0fuploadTimestamp\"a\n" +
