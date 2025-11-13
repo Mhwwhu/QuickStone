@@ -13,6 +13,14 @@ enum BucketACLType {
     PUBLIC = 2;
 }
 
+message BucketMeta {
+    string bucket_name = 1;
+    string area = 2; //桶的存储服务器所在地
+    StorageType storage_type = 3;
+    BucketACLType acl_type = 4;
+    string create_timestamp = 5;
+}
+
 message CreateBucketRequest {
     string bucket = 1;
     string area = 2; //桶的存储服务器所在地
@@ -50,6 +58,16 @@ message ShowBucketResponse {
     string create_timestamp = 7;
 }
 
+message ShowUserBucketsRequest {
+    string user_name = 1;
+}
+
+message ShowUserBucketsResponse {
+    uint32 status_code = 1;
+    string status_msg = 2;
+    repeated BucketMeta buckets = 3;
+}
+
 // message SetBucketACLRequest {
 //     string bucket = 1;
 //     BucketACLType acl_type = 2;
@@ -61,4 +79,5 @@ service BucketService {
     rpc CreateBucket(CreateBucketRequest) returns(CreateBucketResponse);
     rpc DeleteBucket(DeleteBucketRequest) returns(DeleteBucketResponse);
     rpc ShowBucket(ShowBucketRequest) returns(ShowBucketResponse);
+    rpc ShowUserBuckets(ShowUserBucketsRequest) returns(ShowUserBucketsResponse);
 }

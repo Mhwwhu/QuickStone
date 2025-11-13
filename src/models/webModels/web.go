@@ -10,8 +10,8 @@ type StandardResponse struct {
 }
 
 type LoginRequest struct {
-	UserName string `form:"username" binding:"required"`
-	Password string `form:"password" binding:"required"`
+	UserName string `json:"username" form:"username" binding:"required"`
+	Password string `json:"password" form:"password" binding:"required"`
 }
 
 type LoginResponse struct {
@@ -71,4 +71,23 @@ type ShowBucketResponse struct {
 	CreateTime  string `json:"create_time"`
 	ObjectNum   uint32 `json:"object_num"`
 	Status      string `json:"status"`
+}
+
+type ShowUserBucketsRequest struct {
+	UserName string `json:"user_name" form:"user_name" binding:"required"`
+}
+
+type BucketMeta struct {
+	UserName    string `json:"user_name"`
+	BucketName  string `json:"bucket_name"`
+	Area        string `json:"area"`
+	StorageType string `json:"storage_type"`
+	ACLType     string `json:"acl_type"`
+	CreateTime  string `json:"create_time"`
+	Status      string `json:"status"`
+}
+
+type ShowUserBucketsResponse struct {
+	StandardResponse
+	Buckets []BucketMeta `json:"buckets"`
 }

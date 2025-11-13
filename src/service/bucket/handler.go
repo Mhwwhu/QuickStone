@@ -68,7 +68,7 @@ func (s BucketService) DeleteBucket(ctx context.Context, req *bucket.DeleteBucke
 func (s BucketService) ShowBucket(ctx context.Context, req *bucket.ShowBucketRequest) (resp *bucket.ShowBucketResponse, err error) {
 	resp = &bucket.ShowBucketResponse{}
 	var bucketModel dbModels.Bucket
-	result := database.Client.WithContext(ctx).Where("name = ?", req.Bucket).Find(&bucketModel)
+	result := database.Client.WithContext(ctx).Where("user_name = ? and name = ?", req.UserName, req.Bucket).Find(&bucketModel)
 	if result.RowsAffected == 0 {
 		logrus.Infof("No matched buckets.")
 		resp.StatusCode = constant.BucketNotExistsErrorCode
@@ -84,6 +84,31 @@ func (s BucketService) ShowBucket(ctx context.Context, req *bucket.ShowBucketReq
 	var count int64
 	database.Client.WithContext(ctx).Where("user_name = ? and bucket_name = ?", req.UserName, req.Bucket).Count(&count)
 	resp.ObjectNum = uint32(count)
+
+	return
+}
+
+func (s BucketService) ShowUserBuckets(ctx context.Context, req *bucket.ShowUserBucketsRequest) (resp *bucket.ShowUserBucketsResponse, err error) {
+	resp = &bucket.ShowUserBucketsResponse{}
+	var bucketModels []dbModels.Bucket
+	result := database.Client.WithContext(ctx).Where("user_name = ?", req.UserName).Find(&bucketModels)
+	if result.Error != nil {
+		resp = &bucket.ShowUserBucketsResponse{
+			StatusCode: constant.DatabaseErrorCode,
+		}
+		err = result.Error
+		return
+	}
+
+	for i := 0; i < len(bucketModels); i++ {
+		resp.Buckets = append(resp.Buckets, &bucket.BucketMeta{
+			BucketName:      bucketModels[i].Name,
+			Area:            bucketModels[i].Area,
+			StorageType:     bucket.StorageType(bucketModels[i].StorageType),
+			AclType:         bucket.BucketACLType(bucketModels[i].ACLType),
+			CreateTimestamp: bucketModels[i].CreateTime.Format(config.TimeFormat),
+		})
+	}
 
 	return
 }

@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	BucketService_CreateBucket_FullMethodName = "/rpc.bucket.BucketService/CreateBucket"
-	BucketService_DeleteBucket_FullMethodName = "/rpc.bucket.BucketService/DeleteBucket"
-	BucketService_ShowBucket_FullMethodName   = "/rpc.bucket.BucketService/ShowBucket"
+	BucketService_CreateBucket_FullMethodName    = "/rpc.bucket.BucketService/CreateBucket"
+	BucketService_DeleteBucket_FullMethodName    = "/rpc.bucket.BucketService/DeleteBucket"
+	BucketService_ShowBucket_FullMethodName      = "/rpc.bucket.BucketService/ShowBucket"
+	BucketService_ShowUserBuckets_FullMethodName = "/rpc.bucket.BucketService/ShowUserBuckets"
 )
 
 // BucketServiceClient is the client API for BucketService service.
@@ -31,6 +32,7 @@ type BucketServiceClient interface {
 	CreateBucket(ctx context.Context, in *CreateBucketRequest, opts ...grpc.CallOption) (*CreateBucketResponse, error)
 	DeleteBucket(ctx context.Context, in *DeleteBucketRequest, opts ...grpc.CallOption) (*DeleteBucketResponse, error)
 	ShowBucket(ctx context.Context, in *ShowBucketRequest, opts ...grpc.CallOption) (*ShowBucketResponse, error)
+	ShowUserBuckets(ctx context.Context, in *ShowUserBucketsRequest, opts ...grpc.CallOption) (*ShowUserBucketsResponse, error)
 }
 
 type bucketServiceClient struct {
@@ -71,6 +73,16 @@ func (c *bucketServiceClient) ShowBucket(ctx context.Context, in *ShowBucketRequ
 	return out, nil
 }
 
+func (c *bucketServiceClient) ShowUserBuckets(ctx context.Context, in *ShowUserBucketsRequest, opts ...grpc.CallOption) (*ShowUserBucketsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ShowUserBucketsResponse)
+	err := c.cc.Invoke(ctx, BucketService_ShowUserBuckets_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BucketServiceServer is the server API for BucketService service.
 // All implementations must embed UnimplementedBucketServiceServer
 // for forward compatibility.
@@ -78,6 +90,7 @@ type BucketServiceServer interface {
 	CreateBucket(context.Context, *CreateBucketRequest) (*CreateBucketResponse, error)
 	DeleteBucket(context.Context, *DeleteBucketRequest) (*DeleteBucketResponse, error)
 	ShowBucket(context.Context, *ShowBucketRequest) (*ShowBucketResponse, error)
+	ShowUserBuckets(context.Context, *ShowUserBucketsRequest) (*ShowUserBucketsResponse, error)
 	mustEmbedUnimplementedBucketServiceServer()
 }
 
@@ -96,6 +109,9 @@ func (UnimplementedBucketServiceServer) DeleteBucket(context.Context, *DeleteBuc
 }
 func (UnimplementedBucketServiceServer) ShowBucket(context.Context, *ShowBucketRequest) (*ShowBucketResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ShowBucket not implemented")
+}
+func (UnimplementedBucketServiceServer) ShowUserBuckets(context.Context, *ShowUserBucketsRequest) (*ShowUserBucketsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowUserBuckets not implemented")
 }
 func (UnimplementedBucketServiceServer) mustEmbedUnimplementedBucketServiceServer() {}
 func (UnimplementedBucketServiceServer) testEmbeddedByValue()                       {}
@@ -172,6 +188,24 @@ func _BucketService_ShowBucket_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BucketService_ShowUserBuckets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowUserBucketsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BucketServiceServer).ShowUserBuckets(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BucketService_ShowUserBuckets_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BucketServiceServer).ShowUserBuckets(ctx, req.(*ShowUserBucketsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BucketService_ServiceDesc is the grpc.ServiceDesc for BucketService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +224,10 @@ var BucketService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ShowBucket",
 			Handler:    _BucketService_ShowBucket_Handler,
+		},
+		{
+			MethodName: "ShowUserBuckets",
+			Handler:    _BucketService_ShowUserBuckets_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -32,6 +32,8 @@ type Bucket struct {
 	ACLType     ACLType     `gorm:"not null"`
 	CreateTime  time.Time   `gorm:"not null;autoCreateTime"`
 	// ObjectNum   uint32      `gorm:"not null"`
+
+	User User `gorm:"foreignKey:UserName;references:Name"`
 }
 
 func init() {

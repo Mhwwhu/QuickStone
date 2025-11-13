@@ -102,12 +102,49 @@ func ShowBucketHandle(c *gin.Context) {
 	})
 }
 
-func OverviewHandle(c *gin.Context) {
+func ShowUserBucketsHandle(c *gin.Context) {
+	ctx := utils.CreateCtxFromGin(c)
 
-	c.JSON(http.StatusOK, gin.H{
-		"status_code": 0,
-		"status_msg":  "success",
-		"bucket_list": "",
-		"bucket_num":  9,
+	var req webModels.ShowUserBucketsRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusOK, webModels.ShowUserBucketsResponse{
+			StandardResponse: webModels.StandardResponse{
+				StatusCode: constant.GateWayParamsErrorCode,
+				StatusMsg:  constant.GateWayParamsError,
+			},
+		})
+		return
+	}
+
+	res, err := bucketClient.ShowUserBuckets(ctx, &bucket.ShowUserBucketsRequest{
+		UserName: req.UserName,
 	})
+
+	if err != nil {
+		c.JSON(http.StatusOK, webModels.ShowUserBucketsResponse{
+			StandardResponse: webModels.StandardResponse{
+				StatusCode: res.StatusCode,
+				StatusMsg:  res.StatusMsg,
+			},
+		})
+		return
+	}
+
+	resp := webModels.ShowUserBucketsResponse{
+		StandardResponse: webModels.StandardResponse{
+			StatusCode: res.StatusCode,
+			StatusMsg:  res.StatusMsg,
+		},
+	}
+	for _, b := range res.Buckets {
+		resp.Buckets = append(resp.Buckets, webModels.BucketMeta{
+			UserName:    req.UserName,
+			BucketName:  b.BucketName,
+			Area:        b.Area,
+			StorageType: bucket.StorageType_name[int32(b.StorageType)],
+			ACLType:     bucket.BucketACLType_name[int32(b.AclType)],
+			CreateTime:  b.CreateTimestamp,
+		})
+	}
+	c.JSON(http.StatusOK, resp)
 }

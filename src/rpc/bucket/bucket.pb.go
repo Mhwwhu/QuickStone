@@ -116,6 +116,82 @@ func (BucketACLType) EnumDescriptor() ([]byte, []int) {
 	return file_bucket_proto_rawDescGZIP(), []int{1}
 }
 
+type BucketMeta struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	BucketName      string                 `protobuf:"bytes,1,opt,name=bucket_name,json=bucketName,proto3" json:"bucket_name,omitempty"`
+	Area            string                 `protobuf:"bytes,2,opt,name=area,proto3" json:"area,omitempty"` //桶的存储服务器所在地
+	StorageType     StorageType            `protobuf:"varint,3,opt,name=storage_type,json=storageType,proto3,enum=rpc.bucket.StorageType" json:"storage_type,omitempty"`
+	AclType         BucketACLType          `protobuf:"varint,4,opt,name=acl_type,json=aclType,proto3,enum=rpc.bucket.BucketACLType" json:"acl_type,omitempty"`
+	CreateTimestamp string                 `protobuf:"bytes,5,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *BucketMeta) Reset() {
+	*x = BucketMeta{}
+	mi := &file_bucket_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BucketMeta) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BucketMeta) ProtoMessage() {}
+
+func (x *BucketMeta) ProtoReflect() protoreflect.Message {
+	mi := &file_bucket_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BucketMeta.ProtoReflect.Descriptor instead.
+func (*BucketMeta) Descriptor() ([]byte, []int) {
+	return file_bucket_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *BucketMeta) GetBucketName() string {
+	if x != nil {
+		return x.BucketName
+	}
+	return ""
+}
+
+func (x *BucketMeta) GetArea() string {
+	if x != nil {
+		return x.Area
+	}
+	return ""
+}
+
+func (x *BucketMeta) GetStorageType() StorageType {
+	if x != nil {
+		return x.StorageType
+	}
+	return StorageType_STANDARD
+}
+
+func (x *BucketMeta) GetAclType() BucketACLType {
+	if x != nil {
+		return x.AclType
+	}
+	return BucketACLType_PRIVATE
+}
+
+func (x *BucketMeta) GetCreateTimestamp() string {
+	if x != nil {
+		return x.CreateTimestamp
+	}
+	return ""
+}
+
 type CreateBucketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Bucket        string                 `protobuf:"bytes,1,opt,name=bucket,proto3" json:"bucket,omitempty"`
@@ -128,7 +204,7 @@ type CreateBucketRequest struct {
 
 func (x *CreateBucketRequest) Reset() {
 	*x = CreateBucketRequest{}
-	mi := &file_bucket_proto_msgTypes[0]
+	mi := &file_bucket_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -140,7 +216,7 @@ func (x *CreateBucketRequest) String() string {
 func (*CreateBucketRequest) ProtoMessage() {}
 
 func (x *CreateBucketRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_bucket_proto_msgTypes[0]
+	mi := &file_bucket_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -153,7 +229,7 @@ func (x *CreateBucketRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBucketRequest.ProtoReflect.Descriptor instead.
 func (*CreateBucketRequest) Descriptor() ([]byte, []int) {
-	return file_bucket_proto_rawDescGZIP(), []int{0}
+	return file_bucket_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateBucketRequest) GetBucket() string {
@@ -195,7 +271,7 @@ type CreateBucketResponse struct {
 
 func (x *CreateBucketResponse) Reset() {
 	*x = CreateBucketResponse{}
-	mi := &file_bucket_proto_msgTypes[1]
+	mi := &file_bucket_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -207,7 +283,7 @@ func (x *CreateBucketResponse) String() string {
 func (*CreateBucketResponse) ProtoMessage() {}
 
 func (x *CreateBucketResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_bucket_proto_msgTypes[1]
+	mi := &file_bucket_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -220,7 +296,7 @@ func (x *CreateBucketResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBucketResponse.ProtoReflect.Descriptor instead.
 func (*CreateBucketResponse) Descriptor() ([]byte, []int) {
-	return file_bucket_proto_rawDescGZIP(), []int{1}
+	return file_bucket_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateBucketResponse) GetStatusCode() uint32 {
@@ -253,7 +329,7 @@ type DeleteBucketRequest struct {
 
 func (x *DeleteBucketRequest) Reset() {
 	*x = DeleteBucketRequest{}
-	mi := &file_bucket_proto_msgTypes[2]
+	mi := &file_bucket_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -265,7 +341,7 @@ func (x *DeleteBucketRequest) String() string {
 func (*DeleteBucketRequest) ProtoMessage() {}
 
 func (x *DeleteBucketRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_bucket_proto_msgTypes[2]
+	mi := &file_bucket_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -278,7 +354,7 @@ func (x *DeleteBucketRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteBucketRequest.ProtoReflect.Descriptor instead.
 func (*DeleteBucketRequest) Descriptor() ([]byte, []int) {
-	return file_bucket_proto_rawDescGZIP(), []int{2}
+	return file_bucket_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *DeleteBucketRequest) GetBucket() string {
@@ -298,7 +374,7 @@ type DeleteBucketResponse struct {
 
 func (x *DeleteBucketResponse) Reset() {
 	*x = DeleteBucketResponse{}
-	mi := &file_bucket_proto_msgTypes[3]
+	mi := &file_bucket_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -310,7 +386,7 @@ func (x *DeleteBucketResponse) String() string {
 func (*DeleteBucketResponse) ProtoMessage() {}
 
 func (x *DeleteBucketResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_bucket_proto_msgTypes[3]
+	mi := &file_bucket_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -323,7 +399,7 @@ func (x *DeleteBucketResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteBucketResponse.ProtoReflect.Descriptor instead.
 func (*DeleteBucketResponse) Descriptor() ([]byte, []int) {
-	return file_bucket_proto_rawDescGZIP(), []int{3}
+	return file_bucket_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DeleteBucketResponse) GetStatusCode() uint32 {
@@ -350,7 +426,7 @@ type ShowBucketRequest struct {
 
 func (x *ShowBucketRequest) Reset() {
 	*x = ShowBucketRequest{}
-	mi := &file_bucket_proto_msgTypes[4]
+	mi := &file_bucket_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -362,7 +438,7 @@ func (x *ShowBucketRequest) String() string {
 func (*ShowBucketRequest) ProtoMessage() {}
 
 func (x *ShowBucketRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_bucket_proto_msgTypes[4]
+	mi := &file_bucket_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -375,7 +451,7 @@ func (x *ShowBucketRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ShowBucketRequest.ProtoReflect.Descriptor instead.
 func (*ShowBucketRequest) Descriptor() ([]byte, []int) {
-	return file_bucket_proto_rawDescGZIP(), []int{4}
+	return file_bucket_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ShowBucketRequest) GetUserName() string {
@@ -407,7 +483,7 @@ type ShowBucketResponse struct {
 
 func (x *ShowBucketResponse) Reset() {
 	*x = ShowBucketResponse{}
-	mi := &file_bucket_proto_msgTypes[5]
+	mi := &file_bucket_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -419,7 +495,7 @@ func (x *ShowBucketResponse) String() string {
 func (*ShowBucketResponse) ProtoMessage() {}
 
 func (x *ShowBucketResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_bucket_proto_msgTypes[5]
+	mi := &file_bucket_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,7 +508,7 @@ func (x *ShowBucketResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ShowBucketResponse.ProtoReflect.Descriptor instead.
 func (*ShowBucketResponse) Descriptor() ([]byte, []int) {
-	return file_bucket_proto_rawDescGZIP(), []int{5}
+	return file_bucket_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ShowBucketResponse) GetStatusCode() uint32 {
@@ -484,12 +560,124 @@ func (x *ShowBucketResponse) GetCreateTimestamp() string {
 	return ""
 }
 
+type ShowUserBucketsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserName      string                 `protobuf:"bytes,1,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ShowUserBucketsRequest) Reset() {
+	*x = ShowUserBucketsRequest{}
+	mi := &file_bucket_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ShowUserBucketsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ShowUserBucketsRequest) ProtoMessage() {}
+
+func (x *ShowUserBucketsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_bucket_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ShowUserBucketsRequest.ProtoReflect.Descriptor instead.
+func (*ShowUserBucketsRequest) Descriptor() ([]byte, []int) {
+	return file_bucket_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ShowUserBucketsRequest) GetUserName() string {
+	if x != nil {
+		return x.UserName
+	}
+	return ""
+}
+
+type ShowUserBucketsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StatusCode    uint32                 `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
+	StatusMsg     string                 `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
+	Buckets       []*BucketMeta          `protobuf:"bytes,3,rep,name=buckets,proto3" json:"buckets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ShowUserBucketsResponse) Reset() {
+	*x = ShowUserBucketsResponse{}
+	mi := &file_bucket_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ShowUserBucketsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ShowUserBucketsResponse) ProtoMessage() {}
+
+func (x *ShowUserBucketsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_bucket_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ShowUserBucketsResponse.ProtoReflect.Descriptor instead.
+func (*ShowUserBucketsResponse) Descriptor() ([]byte, []int) {
+	return file_bucket_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ShowUserBucketsResponse) GetStatusCode() uint32 {
+	if x != nil {
+		return x.StatusCode
+	}
+	return 0
+}
+
+func (x *ShowUserBucketsResponse) GetStatusMsg() string {
+	if x != nil {
+		return x.StatusMsg
+	}
+	return ""
+}
+
+func (x *ShowUserBucketsResponse) GetBuckets() []*BucketMeta {
+	if x != nil {
+		return x.Buckets
+	}
+	return nil
+}
+
 var File_bucket_proto protoreflect.FileDescriptor
 
 const file_bucket_proto_rawDesc = "" +
 	"\n" +
 	"\fbucket.proto\x12\n" +
-	"rpc.bucket\"\xb3\x01\n" +
+	"rpc.bucket\"\xde\x01\n" +
+	"\n" +
+	"BucketMeta\x12\x1f\n" +
+	"\vbucket_name\x18\x01 \x01(\tR\n" +
+	"bucketName\x12\x12\n" +
+	"\x04area\x18\x02 \x01(\tR\x04area\x12:\n" +
+	"\fstorage_type\x18\x03 \x01(\x0e2\x17.rpc.bucket.StorageTypeR\vstorageType\x124\n" +
+	"\bacl_type\x18\x04 \x01(\x0e2\x19.rpc.bucket.BucketACLTypeR\aaclType\x12)\n" +
+	"\x10create_timestamp\x18\x05 \x01(\tR\x0fcreateTimestamp\"\xb3\x01\n" +
 	"\x13CreateBucketRequest\x12\x16\n" +
 	"\x06bucket\x18\x01 \x01(\tR\x06bucket\x12\x12\n" +
 	"\x04area\x18\x02 \x01(\tR\x04area\x12:\n" +
@@ -521,7 +709,15 @@ const file_bucket_proto_rawDesc = "" +
 	"\bacl_type\x18\x05 \x01(\x0e2\x19.rpc.bucket.BucketACLTypeR\aaclType\x12\x1d\n" +
 	"\n" +
 	"object_num\x18\x06 \x01(\rR\tobjectNum\x12)\n" +
-	"\x10create_timestamp\x18\a \x01(\tR\x0fcreateTimestamp*)\n" +
+	"\x10create_timestamp\x18\a \x01(\tR\x0fcreateTimestamp\"5\n" +
+	"\x16ShowUserBucketsRequest\x12\x1b\n" +
+	"\tuser_name\x18\x01 \x01(\tR\buserName\"\x8b\x01\n" +
+	"\x17ShowUserBucketsResponse\x12\x1f\n" +
+	"\vstatus_code\x18\x01 \x01(\rR\n" +
+	"statusCode\x12\x1d\n" +
+	"\n" +
+	"status_msg\x18\x02 \x01(\tR\tstatusMsg\x120\n" +
+	"\abuckets\x18\x03 \x03(\v2\x16.rpc.bucket.BucketMetaR\abuckets*)\n" +
 	"\vStorageType\x12\f\n" +
 	"\bSTANDARD\x10\x00\x12\f\n" +
 	"\bLOW_FREQ\x10\x01*9\n" +
@@ -529,12 +725,13 @@ const file_bucket_proto_rawDesc = "" +
 	"\aPRIVATE\x10\x00\x12\x0f\n" +
 	"\vPUBLIC_READ\x10\x01\x12\n" +
 	"\n" +
-	"\x06PUBLIC\x10\x022\x82\x02\n" +
+	"\x06PUBLIC\x10\x022\xde\x02\n" +
 	"\rBucketService\x12Q\n" +
 	"\fCreateBucket\x12\x1f.rpc.bucket.CreateBucketRequest\x1a .rpc.bucket.CreateBucketResponse\x12Q\n" +
 	"\fDeleteBucket\x12\x1f.rpc.bucket.DeleteBucketRequest\x1a .rpc.bucket.DeleteBucketResponse\x12K\n" +
 	"\n" +
-	"ShowBucket\x12\x1d.rpc.bucket.ShowBucketRequest\x1a\x1e.rpc.bucket.ShowBucketResponseB\x1bZ\x19QuickStone/src/rpc/bucketb\x06proto3"
+	"ShowBucket\x12\x1d.rpc.bucket.ShowBucketRequest\x1a\x1e.rpc.bucket.ShowBucketResponse\x12Z\n" +
+	"\x0fShowUserBuckets\x12\".rpc.bucket.ShowUserBucketsRequest\x1a#.rpc.bucket.ShowUserBucketsResponseB\x1bZ\x19QuickStone/src/rpc/bucketb\x06proto3"
 
 var (
 	file_bucket_proto_rawDescOnce sync.Once
@@ -549,33 +746,41 @@ func file_bucket_proto_rawDescGZIP() []byte {
 }
 
 var file_bucket_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_bucket_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_bucket_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_bucket_proto_goTypes = []any{
-	(StorageType)(0),             // 0: rpc.bucket.StorageType
-	(BucketACLType)(0),           // 1: rpc.bucket.BucketACLType
-	(*CreateBucketRequest)(nil),  // 2: rpc.bucket.CreateBucketRequest
-	(*CreateBucketResponse)(nil), // 3: rpc.bucket.CreateBucketResponse
-	(*DeleteBucketRequest)(nil),  // 4: rpc.bucket.DeleteBucketRequest
-	(*DeleteBucketResponse)(nil), // 5: rpc.bucket.DeleteBucketResponse
-	(*ShowBucketRequest)(nil),    // 6: rpc.bucket.ShowBucketRequest
-	(*ShowBucketResponse)(nil),   // 7: rpc.bucket.ShowBucketResponse
+	(StorageType)(0),                // 0: rpc.bucket.StorageType
+	(BucketACLType)(0),              // 1: rpc.bucket.BucketACLType
+	(*BucketMeta)(nil),              // 2: rpc.bucket.BucketMeta
+	(*CreateBucketRequest)(nil),     // 3: rpc.bucket.CreateBucketRequest
+	(*CreateBucketResponse)(nil),    // 4: rpc.bucket.CreateBucketResponse
+	(*DeleteBucketRequest)(nil),     // 5: rpc.bucket.DeleteBucketRequest
+	(*DeleteBucketResponse)(nil),    // 6: rpc.bucket.DeleteBucketResponse
+	(*ShowBucketRequest)(nil),       // 7: rpc.bucket.ShowBucketRequest
+	(*ShowBucketResponse)(nil),      // 8: rpc.bucket.ShowBucketResponse
+	(*ShowUserBucketsRequest)(nil),  // 9: rpc.bucket.ShowUserBucketsRequest
+	(*ShowUserBucketsResponse)(nil), // 10: rpc.bucket.ShowUserBucketsResponse
 }
 var file_bucket_proto_depIdxs = []int32{
-	0, // 0: rpc.bucket.CreateBucketRequest.storage_type:type_name -> rpc.bucket.StorageType
-	1, // 1: rpc.bucket.CreateBucketRequest.acl_type:type_name -> rpc.bucket.BucketACLType
-	0, // 2: rpc.bucket.ShowBucketResponse.storage_type:type_name -> rpc.bucket.StorageType
-	1, // 3: rpc.bucket.ShowBucketResponse.acl_type:type_name -> rpc.bucket.BucketACLType
-	2, // 4: rpc.bucket.BucketService.CreateBucket:input_type -> rpc.bucket.CreateBucketRequest
-	4, // 5: rpc.bucket.BucketService.DeleteBucket:input_type -> rpc.bucket.DeleteBucketRequest
-	6, // 6: rpc.bucket.BucketService.ShowBucket:input_type -> rpc.bucket.ShowBucketRequest
-	3, // 7: rpc.bucket.BucketService.CreateBucket:output_type -> rpc.bucket.CreateBucketResponse
-	5, // 8: rpc.bucket.BucketService.DeleteBucket:output_type -> rpc.bucket.DeleteBucketResponse
-	7, // 9: rpc.bucket.BucketService.ShowBucket:output_type -> rpc.bucket.ShowBucketResponse
-	7, // [7:10] is the sub-list for method output_type
-	4, // [4:7] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0,  // 0: rpc.bucket.BucketMeta.storage_type:type_name -> rpc.bucket.StorageType
+	1,  // 1: rpc.bucket.BucketMeta.acl_type:type_name -> rpc.bucket.BucketACLType
+	0,  // 2: rpc.bucket.CreateBucketRequest.storage_type:type_name -> rpc.bucket.StorageType
+	1,  // 3: rpc.bucket.CreateBucketRequest.acl_type:type_name -> rpc.bucket.BucketACLType
+	0,  // 4: rpc.bucket.ShowBucketResponse.storage_type:type_name -> rpc.bucket.StorageType
+	1,  // 5: rpc.bucket.ShowBucketResponse.acl_type:type_name -> rpc.bucket.BucketACLType
+	2,  // 6: rpc.bucket.ShowUserBucketsResponse.buckets:type_name -> rpc.bucket.BucketMeta
+	3,  // 7: rpc.bucket.BucketService.CreateBucket:input_type -> rpc.bucket.CreateBucketRequest
+	5,  // 8: rpc.bucket.BucketService.DeleteBucket:input_type -> rpc.bucket.DeleteBucketRequest
+	7,  // 9: rpc.bucket.BucketService.ShowBucket:input_type -> rpc.bucket.ShowBucketRequest
+	9,  // 10: rpc.bucket.BucketService.ShowUserBuckets:input_type -> rpc.bucket.ShowUserBucketsRequest
+	4,  // 11: rpc.bucket.BucketService.CreateBucket:output_type -> rpc.bucket.CreateBucketResponse
+	6,  // 12: rpc.bucket.BucketService.DeleteBucket:output_type -> rpc.bucket.DeleteBucketResponse
+	8,  // 13: rpc.bucket.BucketService.ShowBucket:output_type -> rpc.bucket.ShowBucketResponse
+	10, // 14: rpc.bucket.BucketService.ShowUserBuckets:output_type -> rpc.bucket.ShowUserBucketsResponse
+	11, // [11:15] is the sub-list for method output_type
+	7,  // [7:11] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_bucket_proto_init() }
@@ -589,7 +794,7 @@ func file_bucket_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_bucket_proto_rawDesc), len(file_bucket_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   6,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
