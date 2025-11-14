@@ -91,3 +91,19 @@ type ShowUserBucketsResponse struct {
 	StandardResponse
 	Buckets []BucketMeta `json:"buckets"`
 }
+
+type ShowObjectsRequest struct {
+	UserName   string `json:"user_name" form:"user_name"`
+	BucketName string `json:"bucket" form:"bucket" binding:"required"`
+}
+
+type ObjectMeta struct {
+	Key        string             `json:"key"`
+	Size       common.ObjectSizeT `json:"size"`
+	CreateTime string             `json:"create_time"`
+}
+
+type ShowObjectsResponse struct {
+	StandardResponse
+	Objects []ObjectMeta `json:"objects"`
+}

@@ -21,6 +21,12 @@ message BucketMeta {
     string create_timestamp = 5;
 }
 
+message ObjectMeta {
+    string key = 1;
+    uint64 size = 2;
+    string create_timestamp = 3;
+}
+
 message CreateBucketRequest {
     string bucket = 1;
     string area = 2; //桶的存储服务器所在地
@@ -68,6 +74,17 @@ message ShowUserBucketsResponse {
     repeated BucketMeta buckets = 3;
 }
 
+message ShowObjectsRequest {
+    string user_name = 1;
+    string bucket = 2;
+}
+
+message ShowObjectsResponse {
+    uint32 status_code = 1;
+    string status_msg = 2;
+    repeated ObjectMeta objects = 3;
+}
+
 // message SetBucketACLRequest {
 //     string bucket = 1;
 //     BucketACLType acl_type = 2;
@@ -80,4 +97,5 @@ service BucketService {
     rpc DeleteBucket(DeleteBucketRequest) returns(DeleteBucketResponse);
     rpc ShowBucket(ShowBucketRequest) returns(ShowBucketResponse);
     rpc ShowUserBuckets(ShowUserBucketsRequest) returns(ShowUserBucketsResponse);
+    rpc ShowObjects(ShowObjectsRequest) returns(ShowObjectsResponse);
 }

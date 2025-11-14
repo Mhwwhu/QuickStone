@@ -23,6 +23,7 @@ const (
 	BucketService_DeleteBucket_FullMethodName    = "/rpc.bucket.BucketService/DeleteBucket"
 	BucketService_ShowBucket_FullMethodName      = "/rpc.bucket.BucketService/ShowBucket"
 	BucketService_ShowUserBuckets_FullMethodName = "/rpc.bucket.BucketService/ShowUserBuckets"
+	BucketService_ShowObjects_FullMethodName     = "/rpc.bucket.BucketService/ShowObjects"
 )
 
 // BucketServiceClient is the client API for BucketService service.
@@ -33,6 +34,7 @@ type BucketServiceClient interface {
 	DeleteBucket(ctx context.Context, in *DeleteBucketRequest, opts ...grpc.CallOption) (*DeleteBucketResponse, error)
 	ShowBucket(ctx context.Context, in *ShowBucketRequest, opts ...grpc.CallOption) (*ShowBucketResponse, error)
 	ShowUserBuckets(ctx context.Context, in *ShowUserBucketsRequest, opts ...grpc.CallOption) (*ShowUserBucketsResponse, error)
+	ShowObjects(ctx context.Context, in *ShowObjectsRequest, opts ...grpc.CallOption) (*ShowObjectsResponse, error)
 }
 
 type bucketServiceClient struct {
@@ -83,6 +85,16 @@ func (c *bucketServiceClient) ShowUserBuckets(ctx context.Context, in *ShowUserB
 	return out, nil
 }
 
+func (c *bucketServiceClient) ShowObjects(ctx context.Context, in *ShowObjectsRequest, opts ...grpc.CallOption) (*ShowObjectsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ShowObjectsResponse)
+	err := c.cc.Invoke(ctx, BucketService_ShowObjects_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BucketServiceServer is the server API for BucketService service.
 // All implementations must embed UnimplementedBucketServiceServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type BucketServiceServer interface {
 	DeleteBucket(context.Context, *DeleteBucketRequest) (*DeleteBucketResponse, error)
 	ShowBucket(context.Context, *ShowBucketRequest) (*ShowBucketResponse, error)
 	ShowUserBuckets(context.Context, *ShowUserBucketsRequest) (*ShowUserBucketsResponse, error)
+	ShowObjects(context.Context, *ShowObjectsRequest) (*ShowObjectsResponse, error)
 	mustEmbedUnimplementedBucketServiceServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedBucketServiceServer) ShowBucket(context.Context, *ShowBucketR
 }
 func (UnimplementedBucketServiceServer) ShowUserBuckets(context.Context, *ShowUserBucketsRequest) (*ShowUserBucketsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ShowUserBuckets not implemented")
+}
+func (UnimplementedBucketServiceServer) ShowObjects(context.Context, *ShowObjectsRequest) (*ShowObjectsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowObjects not implemented")
 }
 func (UnimplementedBucketServiceServer) mustEmbedUnimplementedBucketServiceServer() {}
 func (UnimplementedBucketServiceServer) testEmbeddedByValue()                       {}
@@ -206,6 +222,24 @@ func _BucketService_ShowUserBuckets_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BucketService_ShowObjects_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowObjectsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BucketServiceServer).ShowObjects(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BucketService_ShowObjects_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BucketServiceServer).ShowObjects(ctx, req.(*ShowObjectsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BucketService_ServiceDesc is the grpc.ServiceDesc for BucketService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var BucketService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ShowUserBuckets",
 			Handler:    _BucketService_ShowUserBuckets_Handler,
+		},
+		{
+			MethodName: "ShowObjects",
+			Handler:    _BucketService_ShowObjects_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -28,6 +28,7 @@ func InitDefaultRouter(router *gin.Engine) {
 			bucketRouter.POST("/create", bucket.CreateBucketHandle)
 			bucketRouter.GET("/info", bucket.ShowBucketHandle)
 			bucketRouter.POST("/overview", bucket.ShowUserBucketsHandle)
+			bucketRouter.GET("/objects", bucket.ShowObjectsHandle)
 		}
 	}
 }

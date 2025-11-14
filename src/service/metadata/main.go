@@ -87,6 +87,7 @@ func updateObjMeta(channel *amqp.Channel) {
 			BucketName: evt.Bucket,
 			Key:        evt.Key,
 			ObjectType: evt.ObjType,
+			Size:       evt.Size,
 		}
 		switch evt.EventType {
 		case "stored":

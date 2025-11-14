@@ -10,6 +10,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc/metadata"
 )
 
 var bucketClient bucket.BucketServiceClient
@@ -144,6 +145,57 @@ func ShowUserBucketsHandle(c *gin.Context) {
 			StorageType: bucket.StorageType_name[int32(b.StorageType)],
 			ACLType:     bucket.BucketACLType_name[int32(b.AclType)],
 			CreateTime:  b.CreateTimestamp,
+		})
+	}
+	c.JSON(http.StatusOK, resp)
+}
+
+func ShowObjectsHandle(c *gin.Context) {
+	ctx := utils.CreateCtxFromGin(c)
+	md, _ := metadata.FromOutgoingContext(ctx)
+	userName := md.Get(constant.CtxUserNameKey)[0]
+
+	var req webModels.ShowObjectsRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusOK, webModels.ShowUserBucketsResponse{
+			StandardResponse: webModels.StandardResponse{
+				StatusCode: constant.GateWayParamsErrorCode,
+				StatusMsg:  constant.GateWayParamsError,
+			},
+		})
+		return
+	}
+
+	if req.UserName == "" {
+		req.UserName = userName
+	}
+
+	res, err := bucketClient.ShowObjects(ctx, &bucket.ShowObjectsRequest{
+		UserName: req.UserName,
+		Bucket:   req.BucketName,
+	})
+
+	if err != nil {
+		c.JSON(http.StatusOK, webModels.ShowObjectsResponse{
+			StandardResponse: webModels.StandardResponse{
+				StatusCode: res.StatusCode,
+				StatusMsg:  res.StatusMsg,
+			},
+		})
+		return
+	}
+
+	resp := webModels.ShowObjectsResponse{
+		StandardResponse: webModels.StandardResponse{
+			StatusCode: res.StatusCode,
+			StatusMsg:  res.StatusMsg,
+		},
+	}
+	for _, obj := range res.Objects {
+		resp.Objects = append(resp.Objects, webModels.ObjectMeta{
+			Key:        obj.Key,
+			Size:       obj.Size,
+			CreateTime: obj.CreateTimestamp,
 		})
 	}
 	c.JSON(http.StatusOK, resp)

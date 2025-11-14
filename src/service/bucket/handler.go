@@ -112,3 +112,26 @@ func (s BucketService) ShowUserBuckets(ctx context.Context, req *bucket.ShowUser
 
 	return
 }
+
+func (s BucketService) ShowObjects(ctx context.Context, req *bucket.ShowObjectsRequest) (resp *bucket.ShowObjectsResponse, err error) {
+	resp = &bucket.ShowObjectsResponse{}
+	var objectModels []dbModels.Object
+	result := database.Client.WithContext(ctx).Where("user_name = ? and bucket_name = ?", req.UserName, req.Bucket).Find(&objectModels)
+	if result.Error != nil {
+		resp = &bucket.ShowObjectsResponse{
+			StatusCode: constant.DatabaseErrorCode,
+		}
+		err = result.Error
+		return
+	}
+
+	for _, obj := range objectModels {
+		resp.Objects = append(resp.Objects, &bucket.ObjectMeta{
+			Key:             obj.Key,
+			Size:            obj.Size,
+			CreateTimestamp: obj.CreateTime.Format(config.TimeFormat),
+		})
+	}
+
+	return
+}
