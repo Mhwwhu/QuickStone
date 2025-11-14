@@ -10,7 +10,7 @@ type StandardResponse struct {
 }
 
 type LoginRequest struct {
-	UserName string `json:"username" form:"username" binding:"required"`
+	UserName string `json:"user_name" form:"user_name" binding:"required"`
 	Password string `json:"password" form:"password" binding:"required"`
 }
 
@@ -21,8 +21,8 @@ type LoginResponse struct {
 }
 
 type RegisterRequest struct {
-	UserName string `form:"username" binding:"required"`
-	Password string `form:"password" binding:"required"`
+	UserName string `json:"user_name" form:"user_name" binding:"required"`
+	Password string `json:"password" form:"password" binding:"required"`
 }
 
 type RegisterResponse struct {
@@ -32,10 +32,10 @@ type RegisterResponse struct {
 }
 
 type UploadObjectRequest struct {
-	TargetUserName string `form:"target_user_name"` // 留空表示当前用户
-	Bucket         string `form:"bucket"`
-	Key            string `form:"key"`
-	ObjectType     string `form:"obj_type"`
+	TargetUserName string `json:"target_user_name" form:"target_user_name"` // 留空表示当前用户
+	Bucket         string `json:"bucket_name" form:"bucket_name"`
+	Key            string `json:"key" form:"key"`
+	ObjectType     string `json:"object_type" form:"object_type"`
 }
 
 type UploadObjectResponse struct {
@@ -47,10 +47,10 @@ type DownloadObjectRequest struct {
 }
 
 type CreateBucketRequest struct {
-	Bucket      string `form:"bucket" binding:"required"`
-	Area        string `form:"area"`
-	StorageType string `form:"storage_type"`
-	ACLType     string `form:"acl_type"`
+	Bucket      string `json:"bucket_name" form:"bucket_name" binding:"required"`
+	Area        string `json:"area" form:"area"`
+	StorageType string `json:"storage_type" form:"storage_type"`
+	ACLType     string `json:"acl_type" form:"acl_type"`
 }
 
 type CreateBucketResponse struct {
@@ -59,8 +59,8 @@ type CreateBucketResponse struct {
 }
 
 type ShowBucketRequest struct {
-	UserName string `form:"user_name" binding:"required"`
-	Bucket   string `form:"bucket" binding:"required"`
+	UserName string `json:"user_name" form:"user_name" binding:"required"`
+	Bucket   string `json:"bucket_name" form:"bucket_name" binding:"required"`
 }
 
 type ShowBucketResponse struct {
@@ -94,7 +94,7 @@ type ShowUserBucketsResponse struct {
 
 type ShowObjectsRequest struct {
 	UserName   string `json:"user_name" form:"user_name"`
-	BucketName string `json:"bucket" form:"bucket" binding:"required"`
+	BucketName string `json:"bucket_name" form:"bucket_name" binding:"required"`
 }
 
 type ObjectMeta struct {
