@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	MetadataService_RegisterUploadingObject_FullMethodName = "/rpc.metadata.MetadataService/RegisterUploadingObject"
+	MetadataService_DeleteObject_FullMethodName            = "/rpc.metadata.MetadataService/DeleteObject"
 )
 
 // MetadataServiceClient is the client API for MetadataService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MetadataServiceClient interface {
 	RegisterUploadingObject(ctx context.Context, in *RegisterUploadingObjectRequest, opts ...grpc.CallOption) (*RegisterUploadingObjectResponse, error)
+	DeleteObject(ctx context.Context, in *DeleteObjectRequest, opts ...grpc.CallOption) (*DeleteObjectResponse, error)
 }
 
 type metadataServiceClient struct {
@@ -47,11 +49,22 @@ func (c *metadataServiceClient) RegisterUploadingObject(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *metadataServiceClient) DeleteObject(ctx context.Context, in *DeleteObjectRequest, opts ...grpc.CallOption) (*DeleteObjectResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteObjectResponse)
+	err := c.cc.Invoke(ctx, MetadataService_DeleteObject_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MetadataServiceServer is the server API for MetadataService service.
 // All implementations must embed UnimplementedMetadataServiceServer
 // for forward compatibility.
 type MetadataServiceServer interface {
 	RegisterUploadingObject(context.Context, *RegisterUploadingObjectRequest) (*RegisterUploadingObjectResponse, error)
+	DeleteObject(context.Context, *DeleteObjectRequest) (*DeleteObjectResponse, error)
 	mustEmbedUnimplementedMetadataServiceServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedMetadataServiceServer struct{}
 
 func (UnimplementedMetadataServiceServer) RegisterUploadingObject(context.Context, *RegisterUploadingObjectRequest) (*RegisterUploadingObjectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterUploadingObject not implemented")
+}
+func (UnimplementedMetadataServiceServer) DeleteObject(context.Context, *DeleteObjectRequest) (*DeleteObjectResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteObject not implemented")
 }
 func (UnimplementedMetadataServiceServer) mustEmbedUnimplementedMetadataServiceServer() {}
 func (UnimplementedMetadataServiceServer) testEmbeddedByValue()                         {}
@@ -104,6 +120,24 @@ func _MetadataService_RegisterUploadingObject_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MetadataService_DeleteObject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteObjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MetadataServiceServer).DeleteObject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MetadataService_DeleteObject_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MetadataServiceServer).DeleteObject(ctx, req.(*DeleteObjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MetadataService_ServiceDesc is the grpc.ServiceDesc for MetadataService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var MetadataService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterUploadingObject",
 			Handler:    _MetadataService_RegisterUploadingObject_Handler,
+		},
+		{
+			MethodName: "DeleteObject",
+			Handler:    _MetadataService_DeleteObject_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

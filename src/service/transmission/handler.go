@@ -50,9 +50,28 @@ func (TransmissionService) Init() {
 	)
 	common.ExitOnErr(err)
 
+	_, err = channel.QueueDeclare(
+		constant.ObjectOnUploadProcessQueue,
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	common.ExitOnErr(err)
+
 	err = channel.QueueBind(
 		constant.ObjectMetaQueue,
 		fmt.Sprintf("%s.*", constant.ObjectEventPrefix),
+		constant.ObjectStorageExchange,
+		false,
+		nil,
+	)
+	common.ExitOnErr(err)
+
+	err = channel.QueueBind(
+		constant.ObjectOnUploadProcessQueue,
+		constant.ObjectStoredEvent,
 		constant.ObjectStorageExchange,
 		false,
 		nil,

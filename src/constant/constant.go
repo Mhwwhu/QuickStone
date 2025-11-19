@@ -11,9 +11,12 @@ const (
 	ObjectStorageExchange = "obj-storage"
 	ObjectEventPrefix     = "object"
 
-	ObjectStoredEvent = "object.stored"
+	ObjectStoredEvent          = "object.stored"
+	ObjectSoftDeletedEvent     = "object.soft-deleted"
+	ObjectPhysicalDeletedEvent = "object.physical-deleted"
 
-	ObjectMetaQueue = "obj-storage.meta.q"
+	ObjectMetaQueue            = "obj-storage.meta.q"
+	ObjectOnUploadProcessQueue = "obj-storage.on-upload-process.q"
 )
 
 const ()

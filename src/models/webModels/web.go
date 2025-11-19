@@ -43,7 +43,20 @@ type UploadObjectResponse struct {
 	ObjectSize common.ObjectSizeT `json:"object_size"`
 }
 
+type DeleteObjectRequest struct {
+	TargetUserName string `json:"target_user_name" form:"target_user_name"` // 留空表示当前用户
+	Bucket         string `json:"bucket_name" form:"bucket_name"`
+	Key            string `json:"key" form:"key" binding:"required"`
+}
+
+type DeleteObjectResponse struct {
+	StandardResponse
+}
+
 type DownloadObjectRequest struct {
+	TargetUserName string `json:"target_user_name" form:"target_user_name"` // 留空表示当前用户
+	Bucket         string `json:"bucket_name" form:"bucket_name"`
+	Key            string `json:"key" form:"key" binding:"required"`
 }
 
 type CreateBucketRequest struct {

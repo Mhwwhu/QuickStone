@@ -116,7 +116,7 @@ func (s BucketService) ShowUserBuckets(ctx context.Context, req *bucket.ShowUser
 func (s BucketService) ShowObjects(ctx context.Context, req *bucket.ShowObjectsRequest) (resp *bucket.ShowObjectsResponse, err error) {
 	resp = &bucket.ShowObjectsResponse{}
 	var objectModels []dbModels.Object
-	result := database.Client.WithContext(ctx).Where("user_name = ? and bucket_name = ?", req.UserName, req.Bucket).Find(&objectModels)
+	result := database.Client.WithContext(ctx).Where("user_name = ? and bucket_name = ? and is_deleted = ?", req.UserName, req.Bucket, false).Find(&objectModels)
 	if result.Error != nil {
 		resp = &bucket.ShowObjectsResponse{
 			StatusCode: constant.DatabaseErrorCode,

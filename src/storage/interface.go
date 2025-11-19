@@ -20,4 +20,6 @@ func init() {
 
 type IStorage interface {
 	UploadObject(ctx context.Context, path common.StoragePath, reader io.Reader) error
+	DownloadObject(ctx context.Context, path common.StoragePath) (io.ReadCloser, error)
+	DeleteObject(ctx context.Context, path common.StoragePath) error
 }

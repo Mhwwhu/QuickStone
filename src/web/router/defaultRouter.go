@@ -2,6 +2,7 @@ package router
 
 import (
 	"QuickStone/src/web/handlers/bucket"
+	meta "QuickStone/src/web/handlers/metadata"
 	trans "QuickStone/src/web/handlers/transmission"
 	"QuickStone/src/web/handlers/user"
 	"QuickStone/src/web/middleware"
@@ -22,13 +23,15 @@ func InitDefaultRouter(router *gin.Engine) {
 	storageRouter := router.Group("/storage", middleware.JwtTokenAuth)
 	{
 		storageRouter.POST("/upload", trans.UploadObjectHandle)
+		storageRouter.POST("/delete", meta.DeleteObjectHandle)
+		storageRouter.POST("/download", trans.DownloadObjectHandler)
 
 		bucketRouter := storageRouter.Group("/bucket")
 		{
 			bucketRouter.POST("/create", bucket.CreateBucketHandle)
-			bucketRouter.GET("/info", bucket.ShowBucketHandle)
+			bucketRouter.POST("/info", bucket.ShowBucketHandle)
 			bucketRouter.POST("/overview", bucket.ShowUserBucketsHandle)
-			bucketRouter.GET("/objects", bucket.ShowObjectsHandle)
+			bucketRouter.POST("/objects", bucket.ShowObjectsHandle)
 		}
 	}
 }

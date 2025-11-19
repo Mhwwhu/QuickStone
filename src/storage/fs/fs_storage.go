@@ -34,3 +34,18 @@ func (FSStorage) UploadObject(ctx context.Context, path common.StoragePath, read
 
 	return nil
 }
+
+func (FSStorage) DownloadObject(ctx context.Context, path common.StoragePath) (io.ReadCloser, error) {
+	localPath := fmt.Sprintf("%s/%s/%s/%s", config.EnvCfg.FsRootPath, path.UserName, path.Bucket, path.Key)
+	file, err := os.OpenFile(localPath, os.O_RDONLY, 0644)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file at path %s: %w", localPath, err)
+	}
+	return file, nil
+}
+
+func (FSStorage) DeleteObject(ctx context.Context, path common.StoragePath) error {
+	localPath := fmt.Sprintf("%s/%s/%s/%s", config.EnvCfg.FsRootPath, path.UserName, path.Bucket, path.Key)
+	err := os.Remove(localPath)
+	return err
+}

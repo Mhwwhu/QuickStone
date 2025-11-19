@@ -8,11 +8,13 @@ import (
 	"os"
 	"syscall"
 
+	"QuickStone/src/common"
 	"QuickStone/src/config"
 	"QuickStone/src/constant"
 	"QuickStone/src/models/dbModels"
 	"QuickStone/src/models/msgModels"
 	"QuickStone/src/rpc/metadata"
+	"QuickStone/src/storage"
 	"QuickStone/src/storage/database"
 	"QuickStone/src/utils/cache"
 	"QuickStone/src/utils/consul"
@@ -82,15 +84,16 @@ func updateObjMeta(channel *amqp.Channel) {
 	for msg := range msgs {
 		evt := msgModels.Object{}
 		json.Unmarshal(msg.Body, &evt)
-		obj := dbModels.Object{
-			UserName:   evt.UserName,
-			BucketName: evt.Bucket,
-			Key:        evt.Key,
-			ObjectType: evt.ObjType,
-			Size:       evt.Size,
-		}
 		switch evt.EventType {
 		case "stored":
+			obj := dbModels.Object{
+				UserName:   evt.UserName,
+				BucketName: evt.Bucket,
+				Key:        evt.Key,
+				ObjectType: evt.ObjType,
+				Size:       evt.Size,
+				IsDeleted:  false,
+			}
 			result := database.Client.Create(&obj)
 			if result.Error != nil {
 				cache.Set(
@@ -99,6 +102,38 @@ func updateObjMeta(channel *amqp.Channel) {
 					false,
 				)
 			}
+		case "soft-deleted":
+			// 调用存储模块进行物理删除
+			logrus.Infof("111\n")
+			err := storage.StorageClient.DeleteObject(
+				context.Background(),
+				common.StoragePath{
+					UserName: evt.UserName,
+					Bucket:   evt.Bucket,
+					Key:      evt.Key,
+				},
+			)
+			common.ExitOnErr(err)
+			evt.EventType = "physical-deleted"
+			body, err := json.Marshal(evt)
+			common.ExitOnErr(err)
+			channel.PublishWithContext(
+				context.Background(),
+				constant.ObjectStorageExchange,
+				constant.ObjectStoredEvent,
+				false,
+				false,
+				amqp.Publishing{
+					ContentType:  "application/json",
+					Body:         body,
+					DeliveryMode: amqp.Persistent,
+				},
+			)
+		case "physical-deleted":
+			result := database.Client.Unscoped().
+				Where("user_name = ? and bucket_name = ? and key = ?", evt.UserName, evt.Bucket, evt.Key).
+				Delete(&dbModels.Object{})
+			common.ExitOnErr(result.Error)
 		}
 		msg.Ack(false)
 	}

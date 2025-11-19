@@ -32,15 +32,25 @@ const (
 
 const (
 	BucketExistsErrorCode = 7
-	BucketExistsError     = "Bucket exists, choose another bucket name."
+	BucketExistsError     = "The bucket exists, choose another bucket name."
 )
 
 const (
 	BucketNotExistsErrorCode = 8
-	BucketNotExistsError     = "Bucket not exists!"
+	BucketNotExistsError     = "The bucket not exists!"
 )
 
 const (
 	ObjectUploadConflictErrorCode = 9
 	ObjectUploadConflictError     = "Object upload conflict!"
+)
+
+const (
+	ObjectDeletedErrorCode = 10
+	ObjectDeletedError     = "The object has been deleted or has not existed."
+)
+
+const (
+	ObjectNotExistsErrorCode = 11
+	ObjectNotExistsError     = "The object not exists."
 )

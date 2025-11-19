@@ -13,6 +13,8 @@ type Object struct {
 	ObjectType string
 	Size       common.ObjectSizeT
 	CreateTime time.Time `gorm:"not null;autoCreateTime"`
+	Status     string
+	IsDeleted  bool
 
 	Bucket Bucket `gorm:"foreignKey:UserName,BucketName;references:UserName,Name"`
 }

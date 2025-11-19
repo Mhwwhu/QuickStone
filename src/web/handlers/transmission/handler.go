@@ -8,9 +8,12 @@ import (
 	"QuickStone/src/common"
 	"QuickStone/src/config"
 	"QuickStone/src/constant"
+	"QuickStone/src/models/dbModels"
 	"QuickStone/src/models/webModels"
 	meta "QuickStone/src/rpc/metadata"
 	trans "QuickStone/src/rpc/transmission"
+	"QuickStone/src/storage"
+	"QuickStone/src/storage/database"
 	grpcutil "QuickStone/src/utils/grpc"
 	"QuickStone/src/web/utils"
 
@@ -60,7 +63,7 @@ func UploadObjectHandle(c *gin.Context) {
 
 	file, fileHeader, err := c.Request.FormFile("file")
 	if err != nil {
-		logrus.Fatalf("Cannot get file from request: %v", err)
+		logrus.Errorf("Cannot get file from request: %v", err)
 		c.JSON(http.StatusOK, webModels.UploadObjectResponse{
 			StandardResponse: webModels.StandardResponse{
 				StatusCode: constant.GateWayParamsErrorCode,
@@ -154,5 +157,70 @@ func UploadObjectHandle(c *gin.Context) {
 			ObjectSize: common.ObjectSizeT(fileHeader.Size),
 		})
 		return
+	}
+}
+
+func DownloadObjectHandler(c *gin.Context) {
+	ctx := utils.CreateCtxFromGin(c)
+
+	var req webModels.DownloadObjectRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusOK, webModels.StandardResponse{
+			StatusCode: constant.GateWayParamsErrorCode,
+			StatusMsg:  constant.GateWayParamsError,
+		})
+		return
+	}
+
+	// 调用统一存储接口，拿到流
+	storagePath := common.StoragePath{
+		UserName: req.TargetUserName,
+		Bucket:   req.Bucket,
+		Key:      req.Key,
+	}
+
+	var objectModel dbModels.Object
+	result := database.Client.WithContext(ctx).Model(&dbModels.Object{}).
+		Where("user_name = ? and bucket_name = ? and key = ? and is_deleted = ?", req.TargetUserName, req.Bucket, req.Key, false).
+		Find(&objectModel)
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusOK, webModels.StandardResponse{
+			StatusCode: constant.ObjectNotExistsErrorCode,
+			StatusMsg:  constant.ObjectNotExistsError,
+		})
+	}
+
+	reader, err := storage.StorageClient.DownloadObject(ctx, storagePath)
+	if err != nil {
+		c.JSON(http.StatusOK, webModels.StandardResponse{
+			StatusCode: constant.InternalErrorCode,
+		})
+		logrus.Errorf("Internal error: %v", err)
+		return
+	}
+	defer reader.Close()
+
+	// 基本头
+	c.Header("Content-Type", "application/octet-stream")
+	// c.Header("Content-Length", strconv.FormatInt(size, 10))
+
+	// 全程流式：Reader -> ResponseWriter，只用一个 buffer
+	buf := make([]byte, 32*1024)
+	if flusher, ok := c.Writer.(http.Flusher); ok {
+		for {
+			n, rErr := reader.Read(buf)
+			if n > 0 {
+				if _, wErr := c.Writer.Write(buf[:n]); wErr != nil {
+					break // 客户端断开，直接结束
+				}
+				flusher.Flush()
+			}
+			if rErr != nil {
+				break // EOF or error
+			}
+		}
+	} else {
+		// 保底：直接交给 io.Copy
+		io.Copy(c.Writer, reader)
 	}
 }
